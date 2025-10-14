@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบสต็อกอุปกรณ์</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <style>
+    body { font-family: "Prompt", sans-serif; margin:20px; background:#f4f6f9; }
+    .container { max-width:1000px; margin:auto; background:#fff; padding:25px; border-radius:15px; box-shadow:0 2px 10px rgba(0,0,0,0.1);}
+    h1 { text-align:center; color:#333; }
+    .btn { padding:10px 15px; border:none; background:#1976d2; color:white; border-radius:6px; cursor:pointer; margin:5px; }
+    .btn:hover { background:#125aa0; }
+    table { width:100%; border-collapse:collapse; margin-top:20px; }
+    th, td { border:1px solid #ccc; padding:8px; text-align:center; }
+    th { background:#1976d2; color:white; }
+    input[type="text"], select { width:80px; text-align:center; }
+    #reader { width:100%; max-width:400px; margin:20px auto; display:none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📦 ระบบสต็อกอุปกรณ์</h1>
+
+    <div style="text-align:center;margin-bottom:15px;">
+      <button class="btn" id="start-scan">📸 สแกน QR Code</button>
+      <button class="btn" id="export">📁 บันทึก Excel</button>
+      <button class="btn" id="addItemBtn">➕ เพิ่มอุปกรณ์</button>
+    </div>
+
+    <div id="reader"></div>
+
+    <table id="stockTable">
+      <thead>
+        <tr>
+          <th>ลำดับ</th>
+          <th>ชื่ออุปกรณ์</th>
+          <th>คงเหลือ</th>
+          <th>หน่วย</th>
+          <th>ตำแหน่ง/ห้องสโตร์</th>
+          <th>หมายเหตุ</th>
+          <th>การจัดการ</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    let items = JSON.parse(localStorage.getItem("stockItems")) || [];
+
+    function saveItems() {
+      localStorage.setItem("stockItems", JSON.stringify(items));
+    }
+
+    function renderTable() {
+      const tbody = document.querySelector("#stockTable tbody");
+      tbody.innerHTML = "";
+      items.forEach((item, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td><input type="text" value="${item.name}" onchange="updateItem(${index}, 'name', this.value)"></td>
+          <td><input type="text" value="${item.remain||''}" placeholder="คงเหลือ" onchange="updateItem(${index}, 'remain', this.value)"></td>
+          <td>
+            <select onchange="updateItem(${index}, 'unit', this.value)">
+              <option value="ชิ้น" ${item.unit==='ชิ้น'?'selected':''}>ชิ้น</option>
+              <option value="กล่อง" ${item.unit==='กล่อง'?'selected':''}>กล่อง</option>
+              <option value="ลัง" ${item.unit==='ลัง'?'selected':''}>ลัง</option>
+              <option value="ม้วน" ${item.unit==='ม้วน'?'selected':''}>ม้วน</option>
+              <option value="ใบ" ${item.unit==='ใบ'?'selected':''}>ใบ</option>
+              <option value="ตัว" ${item.unit==='ตัว'?'selected':''}>ตัว</option>
+              <option value="ดอก" ${item.unit==='ดอก'?'selected':''}>ดอก</option>
+              <option value="อื่นๆ" ${item.unit==='อื่นๆ'?'selected':''}>อื่นๆ</option>
+            </select>
+          </td>
+          <td><input type="text" value="${item.location||''}" placeholder="ตำแหน่ง/ห้องสโตร์" onchange="updateItem(${index}, 'location', this.value)"></td>
+          <td><input type="text" value="${item.note||''}" placeholder="หมายเหตุ" onchange="updateItem(${index}, 'note', this.value)"></td>
+          <td><button class="btn" style="background:#e53935" onclick="deleteItem(${index})">ลบ</button></td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function updateItem(index, key, value) {
+      items[index][key] = value;
+      saveItems();
+    }
+
+    function addItem(name, remain, unit, location, note) {
+      const itemName = name || prompt("ชื่ออุปกรณ์:");
+      if(!itemName) return;
+      const itemRemain = remain || prompt("คงเหลือ:", "");
+      const itemUnit = unit || prompt("หน่วย (ชิ้น/กล่อง/ลัง/ม้วน/ใบ/ตัว/ดอก/อื่นๆ):", "ชิ้น");
+      const itemLocation = location || prompt("ตำแหน่ง / ห้องสโตร์:", "สโตร์กลาง");
+      const itemNote = note || prompt("หมายเหตุ:", "");
+
+      items.push({name:itemName, remain:itemRemain, unit:itemUnit, location:itemLocation, note:itemNote});
+      saveItems();
+      renderTable();
+    }
+
+    function deleteItem(index){
+      if(confirm("ลบรายการนี้หรือไม่?")){
+        items.splice(index,1);
+        saveItems();
+        renderTable();
+      }
+    }
+
+    document.getElementById("addItemBtn").addEventListener("click",()=>addItem());
+
+    document.getElementById("export").addEventListener("click", () => {
+      const ws = XLSX.utils.table_to_sheet(document.getElementById("stockTable"));
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Stock");
+      XLSX.writeFile(wb, "stock_items.xlsx");
+    });
+
+    // QR Scan
+    const html5QrCode = new Html5Qrcode("reader");
+    document.getElementById("start-scan").addEventListener("click",()=>{
+      document.getElementById("reader").style.display="block";
+      Html5Qrcode.getCameras().then(cameras=>{
+        if(cameras && cameras.length){
+          html5QrCode.start(cameras[0].id,{fps:10, qrbox:250},
+            decodedText=>{
+              const itemName = decodedText;
+              const itemRemain = prompt("คงเหลือ:", "");
+              const itemUnit = prompt("หน่วย (ชิ้น/กล่อง/ลัง/ม้วน/ใบ/ตัว/ดอก/อื่นๆ):", "ชิ้น");
+              const itemLocation = prompt("ตำแหน่ง / ห้องสโตร์:", "สโตร์กลาง");
+              const itemNote = prompt("หมายเหตุ:", "");
+
+              addItem(itemName, itemRemain, itemUnit, itemLocation, itemNote);
+              alert("เพิ่มอุปกรณ์จาก QR: "+itemName);
+
+              html5QrCode.stop();
+              document.getElementById("reader").style.display="none";
+            },
+            errorMessage=>{ console.log("Scanning...", errorMessage);}
+          );
+        }
+      }).catch(err=>alert("ไม่สามารถเปิดกล้องได้: "+err));
+    });
+
+    renderTable();
+  </script>
+</body>
+</html>
