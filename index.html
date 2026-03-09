@@ -10,25 +10,35 @@
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap');
+
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Prompt', sans-serif; }
+        
         body { background-color: #121212; display: flex; justify-content: center; align-items: center; height: 100dvh; color: #fff; margin: 0; overflow: hidden; }
+
         .mobile-app { width: 100%; max-width: 480px; height: 100%; background-color: #1c1c1e; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.8); display: flex; flex-direction: column; }
+
         @media (min-width: 500px) { .mobile-app { height: 90vh; max-height: 850px; border-radius: 30px; overflow: hidden; } }
+
         .view { display: none; flex-direction: column; height: 100%; overflow-y: auto; padding-bottom: 110px; }
         .view.active { display: flex; }
+
         .app-header { display: flex; justify-content: space-between; align-items: center; padding: calc(20px + env(safe-area-inset-top)) 20px 15px; }
         .logo { font-weight: 600; font-size: 14px; line-height: 1.2; display: flex; gap: 10px; align-items: center; }
         .text-blue { color: #4da6ff; }
         .text-red { color: #ff3b30; }
         .text-green { color: #34c759; }
         .text-yellow { color: #ffd60a; }
+        
         .btn-primary { background: #007aff; color: white; border: none; padding: 15px; border-radius: 12px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 15px; transition: 0.2s; }
         .btn-primary:active { transform: scale(0.95); }
         .input-field { background: #2c2c2e; border: 1px solid #3a3a3c; color: white; padding: 15px; border-radius: 12px; width: 100%; margin-bottom: 15px; outline: none; font-size: 14px; }
         .input-field:focus { border-color: #007aff; }
+        
         select.input-field { appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%238e8e93%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 12px auto; }
+
         #view-login { justify-content: center; padding: 30px; text-align: center; }
         .login-logo { font-size: 50px; margin-bottom: 20px; color: #4da6ff; }
+
         .user-card { background-color: #2c2c2e; margin: 10px 20px; padding: 15px; border-radius: 12px; display: flex; gap: 15px; align-items: center; }
         .user-avatar { width: 40px; height: 40px; background-color: #3a3a3c; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
         .action-grid { display: flex; justify-content: space-around; padding: 20px; text-align: center; font-size: 12px; color: #aeaeb2; cursor: pointer;}
@@ -36,22 +46,27 @@
         .btn-circle:active { transform: scale(0.9); }
         .recent-section { padding: 15px 20px; }
         .recent-item { background: #2c2c2e; padding: 12px 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 14px;}
+
         .scan-area { flex: 1; display: flex; justify-content: center; align-items: center; flex-direction: column; background: #000; position: relative; }
         .popup-card { background: #2c2c2e; padding: 20px calc(20px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-bottom)); border-radius: 15px 15px 0 0; position: absolute; bottom: 0; width: 100%; display: none; z-index: 20; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); }
         .qty-control { display: flex; align-items: center; gap: 15px; margin: 15px 0; }
         .qty-btn { background: #3a3a3c; border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer;}
+
         .cart-list { padding: 20px; }
         .cart-item { background: #2c2c2e; padding: 15px; border-radius: 12px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
         .cart-item-details h4 { font-size: 14px; margin-bottom: 5px; }
         .cart-item-details p { font-size: 12px; color: #8e8e93; }
         .delete-btn { color: #ff3b30; cursor: pointer; font-size: 18px;}
         .empty-state { text-align: center; color: #8e8e93; margin-top: 40px; font-size: 14px; }
+
         .bottom-nav { display: flex; justify-content: space-between; align-items: center; background-color: #1c1c1e; padding: 15px 20px calc(15px + env(safe-area-inset-bottom)); border-top: 1px solid #3a3a3c; position: absolute; bottom: 0; width: 100%; z-index: 10; }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: #8e8e93; font-size: 10px; cursor: pointer; flex: 1; text-align: center; }
         .nav-item i { font-size: 18px; }
         .nav-item.active { color: #007aff; }
         .nav-item.active .scan-fab { background-color: #007aff; width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; margin-top: -30px; border: 4px solid #1c1c1e; }
+        
         div:where(.swal2-container) div:where(.swal2-popup) { border-radius: 20px !important; }
+
         .signature-box { background: #fff; border-radius: 12px; width: 100%; height: 150px; touch-action: none; border: 2px solid #3a3a3c; cursor: crosshair; }
     </style>
 </head>
@@ -291,8 +306,8 @@
 </div>
 
 <script>
-    // URL อันใหม่ล่าสุด
-    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbwAQ_6mFP2Y6PqR8aKmfWJhsJ80uSLLt8EKD4ChFSrOQo2d60-K8sK50cBw1zJspHib/exec"; 
+    // อัปเดต URL เป็นลิงก์ใหม่ของคุณแล้วครับ
+    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbx2zXqDYSzr_cQhdGWAtfG2Y4k90H40gGAZP4KP4OX_Rf370hsLsg5xWKLdQQ93Sx4/exec"; 
 
     let currentQty = 1;
     let cart = JSON.parse(localStorage.getItem('stockFlowCart')) || []; 
@@ -372,7 +387,6 @@
         if(viewId !== 'catalog' && isCatalogScannerOpen) toggleCatalogScanner();
     }
 
-    // --- ฟังก์ชันใหม่: ดึงรายชื่อสินค้าจาก Google Sheets ---
     function syncDatabaseFromCloud() {
         Swal.fire({
             title: 'กำลังดึงข้อมูล...',
@@ -388,7 +402,6 @@
             let addedCount = 0;
             let updatedCount = 0;
 
-            // นำข้อมูลที่ได้จาก Sheet มาผสมกับข้อมูลในเครื่อง
             data.forEach(dbItem => {
                 let existing = stockCatalog.find(item => 
                     (dbItem.barcode && item.barcode === dbItem.barcode) || 
@@ -401,7 +414,6 @@
                     existing.unit = dbItem.unit || existing.unit;
                     updatedCount++;
                 } else {
-                    // ของใหม่จากชีต (ให้ยอดตั้งต้นเป็น 0 ไว้ก่อน)
                     stockCatalog.push({ 
                         barcode: dbItem.barcode, 
                         name: dbItem.name, 
@@ -636,7 +648,8 @@
             if (result.isConfirmed) { 
                 stockCatalog = []; 
                 localStorage.removeItem('stockFlowCatalog'); 
-                renderCatalog(); syncLowStockToSheet();
+                renderCatalog(); 
+                syncLowStockToSheet();
                 Toast.fire({ icon: 'success', title: 'ล้างคลังสินค้าเรียบร้อย' }); 
             }
         });
