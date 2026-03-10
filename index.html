@@ -101,7 +101,7 @@
             <div onclick="navigate('catalog')"><button class="btn-circle" style="background: #007aff;"><i class="fa-solid fa-box-open"></i></button>แคตตาล็อก</div>
         </div>
         <div class="recent-section">
-            <h3 style="font-size: 14px; margin-bottom: 10px;">การแจ้งเตือน</h3>
+            <h3 style="font-size: 14px; margin-bottom: 10px;">แจ้งเตือน</h3>
             <div id="dashboard-summary"></div>
         </div>
     </div>
@@ -306,7 +306,7 @@
 </div>
 
 <script>
-    // อัปเดต URL เป็นลิงก์ใหม่ของคุณแล้วครับ
+    // อัปเดต URL
     const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbx2zXqDYSzr_cQhdGWAtfG2Y4k90H40gGAZP4KP4OX_Rf370hsLsg5xWKLdQQ93Sx4/exec"; 
 
     let currentQty = 1;
@@ -700,7 +700,7 @@
             document.getElementById('scan-item-sku').innerText = `มีในสต็อก: ${foundItem.qty} ${currentUnit}`;
             document.getElementById('scan-hidden-barcode').value = foundItem.barcode || foundItem.name;
         } else {
-            document.getElementById('scan-item-name').innerText = "สินค้านี้อยู่นอกระบบ";
+            document.getElementById('scan-item-name').innerText = "อุปกรณ์นี้อยู่นอกระบบ";
             document.getElementById('scan-item-sku').innerText = `บาร์โค้ด: ${decodedText}`;
             document.getElementById('scan-hidden-barcode').value = decodedText;
         }
