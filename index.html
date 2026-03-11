@@ -3,6 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <meta name="theme-color" content="#1c1c1e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Stock App">
+    <link rel="apple-touch-icon" href="309716.jpg">
+    <link rel="manifest" href="manifest.json">
     <title>Stock Flow - Pro Version</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
@@ -261,7 +268,7 @@
 
             <div style="background: #2c2c2e; border-radius: 15px; overflow: hidden;">
                 <div onclick="syncDatabaseFromCloud()" style="padding: 15px 20px; border-bottom: 1px solid #3a3a3c; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
-                    <div><i class="fa-solid fa-cloud-arrow-down" style="color: #34c759; width: 25px;"></i> ซิงค์ราย อุปกรณ์ (จาก Google Sheets)</div>
+                    <div><i class="fa-solid fa-cloud-arrow-down" style="color: #34c759; width: 25px;"></i> ซิงค์รายชื่ออุปกรณ์ (จาก Google Sheets)</div>
                     <i class="fa-solid fa-chevron-right" style="color: #8e8e93;"></i>
                 </div>
                 <div onclick="navigate('history')" style="padding: 15px 20px; border-bottom: 1px solid #3a3a3c; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
@@ -306,7 +313,13 @@
 </div>
 
 <script>
-    // อัปเดต URL
+    // เปิดใช้งาน Service Worker สำหรับติดตั้ง App
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js').then(reg => console.log('App ready to install')).catch(err => console.log('Error', err));
+        });
+    }
+
     const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbx2zXqDYSzr_cQhdGWAtfG2Y4k90H40gGAZP4KP4OX_Rf370hsLsg5xWKLdQQ93Sx4/exec"; 
 
     let currentQty = 1;
@@ -700,7 +713,7 @@
             document.getElementById('scan-item-sku').innerText = `มีในสต็อก: ${foundItem.qty} ${currentUnit}`;
             document.getElementById('scan-hidden-barcode').value = foundItem.barcode || foundItem.name;
         } else {
-            document.getElementById('scan-item-name').innerText = "อุปกรณ์นี้อยู่นอกระบบ";
+            document.getElementById('scan-item-name').innerText = "สินค้านี้อยู่นอกระบบ";
             document.getElementById('scan-item-sku').innerText = `บาร์โค้ด: ${decodedText}`;
             document.getElementById('scan-hidden-barcode').value = decodedText;
         }
