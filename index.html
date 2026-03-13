@@ -405,13 +405,8 @@
         });
 
         const noCacheUrl = GOOGLE_SHEET_URL + "?t=" + new Date().getTime();
-        fetch(noCacheUrl, { 
-            redirect: "follow", 
-            cache: "no-store",
-            headers: {
-                'Cache-Control': 'no-cache'
-            }
-        })
+        
+        fetch(noCacheUrl, { redirect: "follow" })
         .then(response => response.json())
         .then(data => {
             let addedCount = 0;
