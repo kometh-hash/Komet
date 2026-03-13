@@ -100,11 +100,26 @@
                 <p style="font-size: 12px; color: #8e8e93;">แผนก: ประกอบหลัก</p>
             </div>
         </div>
+        
         <div class="action-grid">
-            <div onclick="navigate('scan')"><button class="btn-circle" style="background: #ff3b30;"><i class="fa-solid fa-qrcode"></i></button>สแกนเบิก</div>
-            <div onclick="navigate('receive')"><button class="btn-circle" style="background: #34c759;"><i class="fa-solid fa-download"></i></button>รับของเข้า</div>
-            <div onclick="navigate('catalog')"><button class="btn-circle" style="background: #007aff;"><i class="fa-solid fa-box-open"></i></button>แคตตาล็อก</div>
+            <div onclick="navigate('scan')">
+                <button class="btn-circle" style="background: #ff3b30;"><i class="fa-solid fa-qrcode"></i></button>สแกนเบิก
+            </div>
+            <div onclick="navigate('receive')">
+                <button class="btn-circle" style="background: #34c759;"><i class="fa-solid fa-download"></i></button>รับของเข้า
+            </div>
+            <div onclick="navigate('catalog')">
+                <button class="btn-circle" style="background: #007aff;"><i class="fa-solid fa-box-open"></i></button>แคตตาล็อก
+            </div>
+            <div onclick="showComingSoon()">
+                <button class="btn-circle" style="background: #3a3a3c; position: relative;">
+                    <i class="fa-solid fa-sitemap" style="color: #aeaeb2;"></i>
+                    <div style="position: absolute; width: 32px; height: 3px; background-color: #ff3b30; transform: rotate(-45deg); border-radius: 2px; opacity: 0.9;"></div>
+                </button>
+                <span style="color: #8e8e93; opacity: 0.6;">หน่วยงาน</span>
+            </div>
         </div>
+
         <div class="recent-section">
             <h3 style="font-size: 14px; margin-bottom: 10px;">แจ้งเตือน</h3>
             <div id="dashboard-summary"></div>
@@ -284,15 +299,6 @@
         </div>
     </div>
 
-    <div id="view-history" class="view">
-        <header class="app-header">
-            <div onclick="navigate('menu')" style="cursor: pointer;"><i class="fa-solid fa-chevron-left"></i> กลับ</div>
-            <div>ประวัติการเบิก</div>
-            <div></div>
-        </header>
-        <div id="history-list" style="padding: 20px; display: flex; flex-direction: column; gap: 15px;"></div>
-    </div>
-
     <nav id="bottom-nav" class="bottom-nav" style="display: none;">
         <div class="nav-item nav-btn" data-target="home" onclick="navigate('home')">
             <i class="fa-solid fa-house"></i><span>หน้าแรก</span>
@@ -307,6 +313,13 @@
         <div class="nav-item nav-btn" data-target="cart" onclick="navigate('cart')">
             <i class="fa-solid fa-cart-shopping"></i><span id="cart-count">ตะกร้า</span>
         </div>
+        <div class="nav-item nav-btn" onclick="showComingSoon()" style="opacity: 0.6;">
+            <div style="position: relative; display: inline-flex; justify-content: center; align-items: center; width: 18px; height: 18px;">
+                <i class="fa-solid fa-sitemap"></i>
+                <div style="position: absolute; width: 26px; height: 2px; background-color: #ff3b30; transform: rotate(-45deg); border-radius: 1px;"></div>
+            </div>
+            <span style="color: #8e8e93;">หน่วยงาน</span>
+        </div>
         <div class="nav-item nav-btn" data-target="menu" onclick="navigate('menu')">
             <i class="fa-solid fa-bars"></i><span>เมนู</span>
         </div>
@@ -315,7 +328,6 @@
 </div>
 
 <script>
-    // URL ของ Google Sheets ล่าสุด
     const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbx27O8xWDVb8fEBK9d3PphYSk2HSg8cBBHMg0RsaOANQ9_bJpLMU3445hLuDNSsowp7/exec"; 
 
     let currentQty = 1;
@@ -396,6 +408,18 @@
         if(viewId !== 'catalog' && isCatalogScannerOpen) toggleCatalogScanner();
     }
 
+    // ฟังก์ชันสำหรับแจ้งเตือนระบบหน่วยงานว่ายังไม่พร้อมใช้งาน
+    function showComingSoon() {
+        Swal.fire({
+            icon: 'info',
+            title: 'ระบบยังไม่พร้อมใช้งาน',
+            text: 'ฟังก์ชัน "จัดการหน่วยงาน" กำลังอยู่ระหว่างการพัฒนาครับ',
+            background: '#2c2c2e',
+            color: '#fff',
+            confirmButtonColor: '#007aff'
+        });
+    }
+
     function syncDatabaseFromCloud() {
         Swal.fire({
             title: 'กำลังดึงข้อมูล...',
@@ -405,7 +429,6 @@
             didOpen: () => { Swal.showLoading(); }
         });
 
-        // ต่อท้ายเวลา ?t= เพื่อป้องกันเบราว์เซอร์จำแคช
         const noCacheUrl = GOOGLE_SHEET_URL + "?t=" + new Date().getTime();
         
         fetch(noCacheUrl, { redirect: "follow" })
@@ -424,14 +447,13 @@
                     existing.name = dbItem.name || existing.name;
                     existing.barcode = dbItem.barcode || existing.barcode;
                     existing.unit = dbItem.unit || existing.unit;
-                    // อัปเดตจำนวนจาก Google Sheets ทับของเดิม
                     existing.qty = dbItem.qty !== undefined ? parseInt(dbItem.qty) : existing.qty;
                     updatedCount++;
                 } else {
                     stockCatalog.push({ 
                         barcode: dbItem.barcode, 
                         name: dbItem.name, 
-                        qty: dbItem.qty !== undefined ? parseInt(dbItem.qty) : 0, // สร้างใหม่พร้อมจำนวน
+                        qty: dbItem.qty !== undefined ? parseInt(dbItem.qty) : 0, 
                         unit: dbItem.unit || 'ชิ้น'
                     });
                     addedCount++;
@@ -440,7 +462,6 @@
 
             localStorage.setItem('stockFlowCatalog', JSON.stringify(stockCatalog));
             
-            // รีเฟรชหน้าจอให้แสดงตัวเลขใหม่ทันที
             if(document.getElementById('view-catalog').classList.contains('active')) renderCatalog();
             if(document.getElementById('view-home').classList.contains('active')) renderHome();
             
