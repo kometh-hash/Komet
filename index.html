@@ -404,7 +404,6 @@
             didOpen: () => { Swal.showLoading(); }
         });
 
-        // ลบ ?t= ออกและใช้ URL ดั้งเดิมเพียวๆ ครับ
         fetch(GOOGLE_SHEET_URL, { redirect: "follow" })
         .then(response => response.json())
         .then(data => {
