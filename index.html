@@ -315,6 +315,7 @@
 </div>
 
 <script>
+    // URL ของ Google Sheets ล่าสุด
     const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbx27O8xWDVb8fEBK9d3PphYSk2HSg8cBBHMg0RsaOANQ9_bJpLMU3445hLuDNSsowp7/exec"; 
 
     let currentQty = 1;
@@ -404,8 +405,10 @@
             didOpen: () => { Swal.showLoading(); }
         });
 
-        // ลบ ?t= ออกและใช้ URL ดั้งเดิมเพียวๆ ครับ เพื่อไม่ให้ติดเรื่อง CORS
-        fetch(GOOGLE_SHEET_URL, { redirect: "follow" })
+        // ต่อท้ายเวลา ?t= เพื่อป้องกันเบราว์เซอร์จำแคช
+        const noCacheUrl = GOOGLE_SHEET_URL + "?t=" + new Date().getTime();
+        
+        fetch(noCacheUrl, { redirect: "follow" })
         .then(response => response.json())
         .then(data => {
             let addedCount = 0;
@@ -421,21 +424,25 @@
                     existing.name = dbItem.name || existing.name;
                     existing.barcode = dbItem.barcode || existing.barcode;
                     existing.unit = dbItem.unit || existing.unit;
-                    // เขียนทับยอด "จำนวน" จากบน Google Sheets ด้วย
-                    existing.qty = dbItem.qty !== undefined ? dbItem.qty : existing.qty;
+                    // อัปเดตจำนวนจาก Google Sheets ทับของเดิม
+                    existing.qty = dbItem.qty !== undefined ? parseInt(dbItem.qty) : existing.qty;
                     updatedCount++;
                 } else {
                     stockCatalog.push({ 
                         barcode: dbItem.barcode, 
                         name: dbItem.name, 
-                        qty: dbItem.qty || 0, // ดึงยอดจำนวนมาจาก Google Sheets
-                        unit: dbItem.unit 
+                        qty: dbItem.qty !== undefined ? parseInt(dbItem.qty) : 0, // สร้างใหม่พร้อมจำนวน
+                        unit: dbItem.unit || 'ชิ้น'
                     });
                     addedCount++;
                 }
             });
 
             localStorage.setItem('stockFlowCatalog', JSON.stringify(stockCatalog));
+            
+            // รีเฟรชหน้าจอให้แสดงตัวเลขใหม่ทันที
+            if(document.getElementById('view-catalog').classList.contains('active')) renderCatalog();
+            if(document.getElementById('view-home').classList.contains('active')) renderHome();
             
             Swal.fire({
                 icon: 'success', 
