@@ -8,8 +8,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Stock App">
-    <link rel="apple-touch-icon" href="309723.png">
-    <link rel="manifest" href="manifest.json">
     <title>Stock Flow - Pro Version</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
@@ -317,13 +315,6 @@
 </div>
 
 <script>
-    // เปิดใช้งาน Service Worker สำหรับติดตั้ง App
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js').then(reg => console.log('App ready to install')).catch(err => console.log('Error', err));
-        });
-    }
-
     const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbx2zXqDYSzr_cQhdGWAtfG2Y4k90H40gGAZP4KP4OX_Rf370hsLsg5xWKLdQQ93Sx4/exec"; 
 
     let currentQty = 1;
@@ -413,7 +404,6 @@
             didOpen: () => { Swal.showLoading(); }
         });
 
-        // บังคับไม่ให้มือถือจำแคช โดยการต่อท้าย URL ด้วยเวลาปัจจุบัน
         const noCacheUrl = GOOGLE_SHEET_URL + "?t=" + new Date().getTime();
         fetch(noCacheUrl, { 
             redirect: "follow", 
