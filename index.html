@@ -413,7 +413,15 @@
             didOpen: () => { Swal.showLoading(); }
         });
 
-        fetch(GOOGLE_SHEET_URL, { redirect: "follow" })
+        // บังคับไม่ให้มือถือจำแคช โดยการต่อท้าย URL ด้วยเวลาปัจจุบัน
+        const noCacheUrl = GOOGLE_SHEET_URL + "?t=" + new Date().getTime();
+        fetch(noCacheUrl, { 
+            redirect: "follow", 
+            cache: "no-store",
+            headers: {
+                'Cache-Control': 'no-cache'
+            }
+        })
         .then(response => response.json())
         .then(data => {
             let addedCount = 0;
