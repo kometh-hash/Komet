@@ -233,6 +233,10 @@
         
         <div id="checkout-section" style="padding: 0 20px 20px; display: none;">
             <div style="background: #2c2c2e; padding: 15px; border-radius: 15px; margin-bottom: 15px;">
+                
+                <label style="font-size: 12px; color: #aeaeb2; margin-bottom: 8px; display: block;"><i class="fa-solid fa-user-tag"></i> ชื่อคนเบิกสินค้า</label>
+                <input type="text" id="picker-name" class="input-field" placeholder="ระบุชื่อผู้เบิก..." style="margin-bottom: 20px;">
+
                 <label style="font-size: 12px; color: #aeaeb2; margin-bottom: 8px; display: block;"><i class="fa-solid fa-pen-nib"></i> ลายเซ็นผู้รับของ (ใช้นิ้วเขียน)</label>
                 <canvas id="signature-pad" class="signature-box"></canvas>
                 <div style="text-align: right; margin-top: 8px;">
@@ -297,6 +301,15 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div id="view-history" class="view">
+        <header class="app-header">
+            <div onclick="navigate('menu')" style="cursor: pointer;"><i class="fa-solid fa-chevron-left"></i> กลับ</div>
+            <div>ประวัติการเบิก</div>
+            <div></div>
+        </header>
+        <div id="history-list" style="padding: 20px; display: flex; flex-direction: column; gap: 15px;"></div>
     </div>
 
     <nav id="bottom-nav" class="bottom-nav" style="display: none;">
@@ -413,7 +426,7 @@
         Swal.fire({
             icon: 'info',
             title: 'ระบบยังไม่พร้อมใช้งาน',
-            text: 'ฟังก์ชัน "จัดการหน่วยงาน" กำลังอยู่ระหว่างการพัฒนา',
+            text: 'ฟังก์ชัน "จัดการหน่วยงาน" กำลังอยู่ระหว่างการพัฒนาครับ',
             background: '#2c2c2e',
             color: '#fff',
             confirmButtonColor: '#007aff'
@@ -540,10 +553,11 @@
         }
     }
 
-    function sendToGoogleSheet(actionType, itemName, itemQty) {
+    // แก้ไขส่งค่า pickerName เพิ่มเข้าไปด้วย
+    function sendToGoogleSheet(actionType, itemName, itemQty, pickerName = "") {
         fetch(GOOGLE_SHEET_URL, {
             redirect: "follow", method: 'POST', mode: 'no-cors', headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ user: currentUser, action: actionType, item: itemName, qty: itemQty })
+            body: JSON.stringify({ user: currentUser, action: actionType, item: itemName, qty: itemQty, picker: pickerName })
         }).catch(error => console.error("Error ส่งข้อมูล:", error));
     }
 
@@ -727,12 +741,12 @@
                         <span style="font-size: 12px; color: #34c759;"><i class="fa-solid fa-check-circle"></i> สำเร็จ</span>
                     </div>
                     <div style="font-size: 14px; margin-bottom: 10px; line-height: 1.5;">
-                        <b>ผู้เบิก:</b> ${record.user}<br>
                         <b>รายการที่เบิก:</b><br>${record.items}
                     </div>
-                    <div>
-                        <span style="font-size: 12px; color: #8e8e93;">ลายเซ็นผู้รับ:</span><br>
-                        <img src="${record.signature}" style="background: #fff; width: 120px; height: auto; border-radius: 8px; margin-top: 5px; border: 1px solid #ccc;">
+                    <div style="border-top: 1px dashed #3a3a3c; padding-top: 10px;">
+                        <span style="font-size: 12px; color: #4da6ff;">ผู้เบิก: ${record.picker}</span><br>
+                        <span style="font-size: 11px; color: #8e8e93;">(บันทึกโดย: ${record.user})</span><br>
+                        <img src="${record.signature}" style="background: #fff; width: 120px; height: auto; border-radius: 8px; margin-top: 8px; border: 1px solid #ccc;">
                     </div>
                 </div>
             `;
@@ -818,9 +832,13 @@
         document.getElementById('cart-count').innerText = `ตะกร้า${cartCountDisplay}`;
     }
 
+    // แก้ไขส่งค่าชื่อผู้เบิกลงไปเก็บด้วย
     function confirmOrder() {
         if(cart.length === 0) { Swal.fire({icon: 'warning', title: 'ตะกร้าว่างเปล่า', text: 'ไม่มีรายการให้เบิก', background: '#2c2c2e', color: '#fff'}); return; }
         
+        const pickerName = document.getElementById('picker-name').value.trim();
+        if(!pickerName) { Swal.fire({icon: 'warning', title: 'ระบุชื่อผู้เบิก', text: 'กรุณากรอกชื่อคนเบิกสินค้าก่อนยืนยัน', background: '#2c2c2e', color: '#fff'}); return; }
+
         if(!hasSignature) { Swal.fire({icon: 'warning', title: 'กรุณาเซ็นชื่อ', text: 'ต้องเซ็นชื่อรับของก่อนยืนยันการเบิก', background: '#2c2c2e', color: '#fff'}); return; }
 
         const signatureImage = canvas.toDataURL("image/jpeg", 0.8);
@@ -832,21 +850,26 @@
             let displayNameForSheet = cartItem.barcode && cartItem.name !== cartItem.barcode ? `[${cartItem.barcode}] ${cartItem.name}` : (cartItem.name || cartItem.barcode);
             
             if(stockItem) { stockItem.qty -= cartItem.qty; if(stockItem.qty < 0) stockItem.qty = 0; }
-            sendToGoogleSheet('เบิกออก (เซ็นรับแล้ว)', displayNameForSheet, cartItem.qty + ' ' + unitText);
+            sendToGoogleSheet('เบิกออก (เซ็นรับแล้ว)', displayNameForSheet, cartItem.qty + ' ' + unitText, pickerName);
         });
 
         localStorage.setItem('stockFlowCatalog', JSON.stringify(stockCatalog));
         
         syncLowStockToSheet();
 
-        const orderRecord = { date: new Date().toLocaleString('th-TH'), user: currentUser, items: itemsListText, signature: signatureImage };
+        const orderRecord = { date: new Date().toLocaleString('th-TH'), picker: pickerName, user: currentUser, items: itemsListText, signature: signatureImage };
         orderHistory.unshift(orderRecord); 
         if (orderHistory.length > 30) orderHistory.pop(); 
         localStorage.setItem('stockFlowHistory', JSON.stringify(orderHistory));
         
         Swal.fire({ icon: 'success', title: 'บันทึกสำเร็จ!', text: 'เบิกของและหักสต็อกเรียบร้อยแล้ว', background: '#2c2c2e', color: '#fff', confirmButtonColor: '#34c759' });
 
-        cart = []; localStorage.removeItem('stockFlowCart'); clearSignature(); navigate('home'); updateCartCount();
+        cart = []; 
+        localStorage.removeItem('stockFlowCart'); 
+        document.getElementById('picker-name').value = '';
+        clearSignature(); 
+        navigate('home'); 
+        updateCartCount();
     }
 
     document.addEventListener('keypress', function(e) {
