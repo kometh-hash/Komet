@@ -315,7 +315,6 @@
 </div>
 
 <script>
-    // ----- ใส่ลิงก์ Google Sheets ล่าสุดแล้ว -----
     const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbx27O8xWDVb8fEBK9d3PphYSk2HSg8cBBHMg0RsaOANQ9_bJpLMU3445hLuDNSsowp7/exec"; 
 
     let currentQty = 1;
@@ -405,6 +404,7 @@
             didOpen: () => { Swal.showLoading(); }
         });
 
+        // ลบ ?t= ออกและใช้ URL ดั้งเดิมเพียวๆ ครับ เพื่อไม่ให้ติดเรื่อง CORS
         fetch(GOOGLE_SHEET_URL, { redirect: "follow" })
         .then(response => response.json())
         .then(data => {
@@ -421,12 +421,14 @@
                     existing.name = dbItem.name || existing.name;
                     existing.barcode = dbItem.barcode || existing.barcode;
                     existing.unit = dbItem.unit || existing.unit;
+                    // เขียนทับยอด "จำนวน" จากบน Google Sheets ด้วย
+                    existing.qty = dbItem.qty !== undefined ? dbItem.qty : existing.qty;
                     updatedCount++;
                 } else {
                     stockCatalog.push({ 
                         barcode: dbItem.barcode, 
                         name: dbItem.name, 
-                        qty: 0, 
+                        qty: dbItem.qty || 0, // ดึงยอดจำนวนมาจาก Google Sheets
                         unit: dbItem.unit 
                     });
                     addedCount++;
