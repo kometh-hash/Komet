@@ -159,8 +159,9 @@
     <option value="ใบ">ใบ</option>
     <option value="ตัว">ตัว</option>
 </select>
+                </div>
             </div>
-            </div>
+            
             <button id="btn-save-new" class="btn-primary" style="background: #34c759; margin-top: 20px;" onclick="processStock('new')">
                 <i class="fa-solid fa-check"></i> บันทึกรายการใหม่
             </button>
@@ -564,44 +565,62 @@
         if(!nameInput && !barcodeInput) { Swal.fire({icon: 'warning', title: 'ข้อมูลไม่ครบ', text: 'กรุณากรอกรหัสบาร์โค้ดหรือชื่อสินค้า', background: '#2c2c2e', color: '#fff'}); return; }
         if(isNaN(qtyInput) || qtyInput < 0) { Swal.fire({icon: 'warning', title: 'ระบุจำนวน', text: 'กรุณากรอกจำนวนตัวเลขให้ถูกต้อง', background: '#2c2c2e', color: '#fff'}); return; }
 
-        const finalName = nameInput || barcodeInput; 
-        const finalBarcode = barcodeInput || '';
         let existingItem = null;
-        if(finalBarcode) { existingItem = stockCatalog.find(item => item.barcode === finalBarcode || item.name === finalBarcode); }
-        if(!existingItem && finalName) { existingItem = stockCatalog.find(item => item.name === finalName || item.barcode === finalName); }
+        if(barcodeInput) { existingItem = stockCatalog.find(item => item.barcode === barcodeInput || item.name === barcodeInput); }
+        if(!existingItem && nameInput) { existingItem = stockCatalog.find(item => item.name === nameInput || item.barcode === nameInput); }
 
-        let logAction = ''; let finalQtyForSheet = 0; let displayNameForSheet = finalBarcode && finalName !== finalBarcode ? `[${finalBarcode}] ${finalName}` : finalName;
+        let logAction = ''; 
+        let finalQtyForSheet = 0; 
 
         if (action === 'new') {
             if (existingItem) { Swal.fire({icon:'error', title:'มีสินค้านี้อยู่แล้ว', background:'#2c2c2e', color:'#fff'}); return; }
             if (qtyInput <= 0) { Swal.fire({icon:'warning', title:'จำนวนต้องมากกว่า 0', background:'#2c2c2e', color:'#fff'}); return; }
-            stockCatalog.push({ barcode: finalBarcode, name: finalName, qty: qtyInput, unit: unitInput });
+            
+            const finalName = nameInput || barcodeInput; 
+            stockCatalog.push({ barcode: barcodeInput, name: finalName, qty: qtyInput, unit: unitInput });
             logAction = 'รับเข้า (ของใหม่)'; finalQtyForSheet = qtyInput;
             Swal.fire({icon: 'success', title: 'เพิ่มรายการใหม่สำเร็จ!', text: `${finalName} จำนวน ${qtyInput} ${unitInput}`, background: '#2c2c2e', color: '#fff', confirmButtonColor: '#34c759'});
         } else if (action === 'add') {
             if (qtyInput <= 0) { Swal.fire({icon:'warning', title:'จำนวนต้องมากกว่า 0', background:'#2c2c2e', color:'#fff'}); return; }
-            existingItem.qty += qtyInput; existingItem.unit = unitInput; existingItem.name = finalName; if(finalBarcode) existingItem.barcode = finalBarcode; 
+            existingItem.qty += qtyInput; 
+            existingItem.unit = unitInput; 
+            existingItem.name = nameInput || existingItem.name; 
+            existingItem.barcode = barcodeInput || existingItem.barcode; 
             logAction = 'เพิ่มสต็อก'; finalQtyForSheet = qtyInput;
             Swal.fire({icon: 'success', title: 'เพิ่มสต็อกสำเร็จ!', text: `ยอดรวมปัจจุบัน: ${existingItem.qty} ${unitInput}`, background: '#2c2c2e', color: '#fff', confirmButtonColor: '#34c759'});
         } else if (action === 'reduce') {
             if (qtyInput <= 0) { Swal.fire({icon:'warning', title:'จำนวนต้องมากกว่า 0', background:'#2c2c2e', color:'#fff'}); return; }
             if (existingItem.qty < qtyInput) { Swal.fire({icon:'error', title:'ทำรายการไม่ได้!', text: 'ยอดในสต็อกมีไม่พอ', background:'#2c2c2e', color:'#fff'}); return; }
-            existingItem.qty -= qtyInput; existingItem.unit = unitInput; existingItem.name = finalName; if(finalBarcode) existingItem.barcode = finalBarcode;
+            existingItem.qty -= qtyInput; 
+            existingItem.unit = unitInput; 
+            existingItem.name = nameInput || existingItem.name; 
+            existingItem.barcode = barcodeInput || existingItem.barcode;
             logAction = 'ลดสต็อก (แก้ไข)'; finalQtyForSheet = qtyInput;
             Swal.fire({icon: 'success', title: 'ลดสต็อกสำเร็จ!', text: `คงเหลือ: ${existingItem.qty} ${unitInput}`, background: '#2c2c2e', color: '#fff', confirmButtonColor: '#34c759'});
         } else if (action === 'edit') {
-            existingItem.qty = qtyInput; existingItem.unit = unitInput; existingItem.name = finalName; if(finalBarcode) existingItem.barcode = finalBarcode;
+            existingItem.qty = qtyInput; 
+            existingItem.unit = unitInput; 
+            existingItem.name = nameInput || existingItem.name; 
+            existingItem.barcode = barcodeInput || existingItem.barcode;
             logAction = 'แก้ไขยอดสุทธิ'; finalQtyForSheet = qtyInput;
             Swal.fire({icon: 'success', title: 'อัปเดตยอดสำเร็จ!', text: `แก้ไขยอดเป็น ${qtyInput} ${unitInput} เรียบร้อย`, background: '#2c2c2e', color: '#fff', confirmButtonColor: '#34c759'});
         }
+
+        let actualNameForSheet = existingItem ? existingItem.name : (nameInput || barcodeInput);
+        let actualBarcodeForSheet = existingItem ? existingItem.barcode : barcodeInput;
+        let displayNameForSheet = actualBarcodeForSheet && actualNameForSheet !== actualBarcodeForSheet ? `[${actualBarcodeForSheet}] ${actualNameForSheet}` : actualNameForSheet;
 
         localStorage.setItem('stockFlowCatalog', JSON.stringify(stockCatalog));
         sendToGoogleSheet(logAction, displayNameForSheet, finalQtyForSheet + ' ' + unitInput);
         
         syncLowStockToSheet();
 
-        document.getElementById('receive-barcode').value = ''; document.getElementById('receive-name').value = ''; document.getElementById('receive-qty').value = ''; document.getElementById('receive-unit').value = 'ชิ้น';
-        checkExistingItem(); navigate('home');
+        document.getElementById('receive-barcode').value = ''; 
+        document.getElementById('receive-name').value = ''; 
+        document.getElementById('receive-qty').value = ''; 
+        document.getElementById('receive-unit').value = 'ชิ้น';
+        checkExistingItem(); 
+        navigate('home');
     }
 
     function renderHome() {
