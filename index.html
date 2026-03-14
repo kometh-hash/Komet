@@ -83,7 +83,7 @@
         <i class="fa-solid fa-layer-group login-logo"></i>
         <h2>STOCK FLOW</h2>
         <p style="color: #8e8e93; margin-bottom: 30px; font-size: 14px;">ระบบจัดการสต็อก</p>
-        <input type="text" id="username" class="input-field" placeholder="ชื่อผู้ใช้งาน">
+        <input type="text" id="username" class="input-field" placeholder="ชื่อผู้ใช้งาน (ผู้บันทึก)">
         <input type="password" class="input-field" placeholder="รหัส PIN 4 หลัก">
         <button class="btn-primary" onclick="login()">เข้าสู่ระบบ</button>
     </div>
@@ -161,17 +161,17 @@
                 <div style="flex: 1;">
                     <label style="font-size: 12px; color: #aeaeb2; margin-bottom: 5px; display: block;">หน่วยนับ</label>
                     <select id="receive-unit" class="input-field">
-    <option value="ดอก">ดอก</option>
-    <option value="กล่อง">กล่อง</option>
-    <option value="ลัง">ลัง</option>
-    <option value="แพ็ค">แพ็ค</option>
-    <option value="กระป๋อง">กระป๋อง</option>
-    <option value="ม้วน">ม้วน</option>
-    <option value="ถุง">ถุง</option>
-    <option value="อัน">อัน</option>
-    <option value="ใบ">ใบ</option>
-    <option value="ตัว">ตัว</option>
-</select>
+                        <option value="ดอก">ดอก</option>
+                        <option value="กล่อง">กล่อง</option>
+                        <option value="ลัง">ลัง</option>
+                        <option value="แพ็ค">แพ็ค</option>
+                        <option value="กระป๋อง">กระป๋อง</option>
+                        <option value="ม้วน">ม้วน</option>
+                        <option value="ถุง">ถุง</option>
+                        <option value="อัน">อัน</option>
+                        <option value="ใบ">ใบ</option>
+                        <option value="ตัว">ตัว</option>
+                    </select>
                 </div>
             </div>
             
@@ -233,6 +233,9 @@
         
         <div id="checkout-section" style="padding: 0 20px 20px; display: none;">
             <div style="background: #2c2c2e; padding: 15px; border-radius: 15px; margin-bottom: 15px;">
+                <label style="font-size: 12px; color: #aeaeb2; margin-bottom: 8px; display: block;">ชื่อผู้รับของ / ผู้เบิกสินค้า</label>
+                <input type="text" id="picker-name" class="input-field" placeholder="ระบุชื่อผู้ที่มารับของ..." style="margin-bottom: 15px;">
+
                 <label style="font-size: 12px; color: #aeaeb2; margin-bottom: 8px; display: block;"><i class="fa-solid fa-pen-nib"></i> ลายเซ็นผู้รับของ (ใช้นิ้วเขียน)</label>
                 <canvas id="signature-pad" class="signature-box"></canvas>
                 <div style="text-align: right; margin-top: 8px;">
@@ -370,7 +373,7 @@
 
     function login() {
         const username = document.getElementById('username').value.trim();
-        if(!username) { Swal.fire({icon: 'warning', title: 'เดี๋ยวก่อน!', text: 'กรุณาใส่ชื่อผู้ใช้งาน', background: '#2c2c2e', color: '#fff', confirmButtonColor: '#007aff'}); return; }
+        if(!username) { Swal.fire({icon: 'warning', title: 'เดี๋ยวก่อน!', text: 'กรุณาใส่ชื่อผู้ใช้งาน (ผู้บันทึก)', background: '#2c2c2e', color: '#fff', confirmButtonColor: '#007aff'}); return; }
         currentUser = username;
         localStorage.setItem('stockFlowUser', currentUser); 
         document.getElementById('display-name').innerText = 'ผู้รับผิดชอบ: ' + currentUser;
@@ -408,151 +411,94 @@
         if(viewId !== 'catalog' && isCatalogScannerOpen) toggleCatalogScanner();
     }
 
-    // ฟังก์ชันสำหรับแจ้งเตือนระบบหน่วยงานว่ายังไม่พร้อมใช้งาน
     function showComingSoon() {
-        Swal.fire({
-            icon: 'info',
-            title: 'ระบบยังไม่พร้อมใช้งาน',
-            text: 'ฟังก์ชัน "จัดการหน่วยงาน" กำลังอยู่ระหว่างการพัฒนา',
-            background: '#2c2c2e',
-            color: '#fff',
-            confirmButtonColor: '#007aff'
-        });
+        Swal.fire({ icon: 'info', title: 'ระบบยังไม่พร้อมใช้งาน', text: 'ฟังก์ชัน "จัดการหน่วยงาน" กำลังอยู่ระหว่างการพัฒนา', background: '#2c2c2e', color: '#fff', confirmButtonColor: '#007aff' });
     }
 
     function syncDatabaseFromCloud() {
-        Swal.fire({
-            title: 'กำลังดึงข้อมูล...',
-            text: 'โปรดรอสักครู่ ระบบกำลังโหลดฐานข้อมูลจาก Google Sheets',
-            background: '#2c2c2e', color: '#fff',
-            allowOutsideClick: false,
-            didOpen: () => { Swal.showLoading(); }
-        });
-
+        Swal.fire({ title: 'กำลังดึงข้อมูล...', text: 'โปรดรอสักครู่ ระบบกำลังโหลดฐานข้อมูลจาก Google Sheets', background: '#2c2c2e', color: '#fff', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
         const noCacheUrl = GOOGLE_SHEET_URL + "?t=" + new Date().getTime();
-        
         fetch(noCacheUrl, { redirect: "follow" })
         .then(response => response.json())
         .then(data => {
-            let addedCount = 0;
-            let updatedCount = 0;
-
+            let addedCount = 0; let updatedCount = 0;
             data.forEach(dbItem => {
-                let existing = stockCatalog.find(item => 
-                    (dbItem.barcode && item.barcode === dbItem.barcode) || 
-                    (dbItem.name && item.name === dbItem.name)
-                );
-
+                let existing = stockCatalog.find(item => (dbItem.barcode && item.barcode === dbItem.barcode) || (dbItem.name && item.name === dbItem.name));
                 if(existing) {
-                    existing.name = dbItem.name || existing.name;
-                    existing.barcode = dbItem.barcode || existing.barcode;
-                    existing.unit = dbItem.unit || existing.unit;
-                    existing.qty = dbItem.qty !== undefined ? parseInt(dbItem.qty) : existing.qty;
+                    existing.name = dbItem.name || existing.name; existing.barcode = dbItem.barcode || existing.barcode;
+                    existing.unit = dbItem.unit || existing.unit; existing.qty = dbItem.qty !== undefined ? parseInt(dbItem.qty) : existing.qty;
                     updatedCount++;
                 } else {
-                    stockCatalog.push({ 
-                        barcode: dbItem.barcode, 
-                        name: dbItem.name, 
-                        qty: dbItem.qty !== undefined ? parseInt(dbItem.qty) : 0, 
-                        unit: dbItem.unit || 'ชิ้น'
-                    });
+                    stockCatalog.push({ barcode: dbItem.barcode, name: dbItem.name, qty: dbItem.qty !== undefined ? parseInt(dbItem.qty) : 0, unit: dbItem.unit || 'ชิ้น' });
                     addedCount++;
                 }
             });
-
             localStorage.setItem('stockFlowCatalog', JSON.stringify(stockCatalog));
-            
             if(document.getElementById('view-catalog').classList.contains('active')) renderCatalog();
             if(document.getElementById('view-home').classList.contains('active')) renderHome();
-            
-            Swal.fire({
-                icon: 'success', 
-                title: 'ซิงค์สำเร็จ!', 
-                text: `พบสินค้าใหม่ ${addedCount} รายการ และอัปเดตข้อมูล ${updatedCount} รายการ`, 
-                background: '#2c2c2e', color: '#fff', confirmButtonColor: '#34c759'
-            });
+            Swal.fire({ icon: 'success', title: 'ซิงค์สำเร็จ!', text: `พบสินค้าใหม่ ${addedCount} รายการ และอัปเดตข้อมูล ${updatedCount} รายการ`, background: '#2c2c2e', color: '#fff', confirmButtonColor: '#34c759' });
         })
-        .catch(err => {
-            console.error(err);
-            Swal.fire({icon: 'error', title: 'ผิดพลาด', text: 'ไม่สามารถดึงข้อมูลได้ โปรดตรวจสอบอินเทอร์เน็ตและตั้งค่า Google Sheets', background: '#2c2c2e', color: '#fff'});
-        });
+        .catch(err => { console.error(err); Swal.fire({icon: 'error', title: 'ผิดพลาด', text: 'ไม่สามารถดึงข้อมูลได้', background: '#2c2c2e', color: '#fff'}); });
     }
 
     function initSignaturePad() {
-        canvas = document.getElementById('signature-pad');
-        if(!canvas) return;
-        
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
-        ctx = canvas.getContext('2d');
-        clearSignature(); 
-
+        canvas = document.getElementById('signature-pad'); if(!canvas) return;
+        canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+        ctx = canvas.getContext('2d'); clearSignature(); 
         const startDrawing = (e) => { isDrawing = true; hasSignature = true; draw(e); };
         const stopDrawing = () => { isDrawing = false; ctx.beginPath(); };
         const draw = (e) => {
-            if (!isDrawing) return;
-            e.preventDefault(); 
+            if (!isDrawing) return; e.preventDefault(); 
             let clientX = e.clientX || (e.touches && e.touches[0].clientX);
             let clientY = e.clientY || (e.touches && e.touches[0].clientY);
             let rect = canvas.getBoundingClientRect();
-            
             ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = '#000'; 
             ctx.lineTo(clientX - rect.left, clientY - rect.top);
             ctx.stroke(); ctx.beginPath(); ctx.moveTo(clientX - rect.left, clientY - rect.top);
         };
-
         canvas.addEventListener('mousedown', startDrawing); canvas.addEventListener('mousemove', draw); canvas.addEventListener('mouseup', stopDrawing); canvas.addEventListener('mouseout', stopDrawing);
         canvas.addEventListener('touchstart', startDrawing, {passive: false}); canvas.addEventListener('touchmove', draw, {passive: false}); canvas.addEventListener('touchend', stopDrawing);
     }
 
-    function clearSignature() {
-        if(!ctx) return;
-        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.beginPath(); hasSignature = false;
-    }
+    function clearSignature() { if(!ctx) return; ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.beginPath(); hasSignature = false; }
 
     function toggleReceiveScanner() {
         const container = document.getElementById('receive-scanner-container');
-        if (isReceiveScannerOpen) {
-            if (html5QrCodeReceive && html5QrCodeReceive.isScanning) { html5QrCodeReceive.stop().then(() => { container.style.display = 'none'; isReceiveScannerOpen = false; }).catch(err => {}); } 
-            else { container.style.display = 'none'; isReceiveScannerOpen = false; }
-        } else {
-            container.style.display = 'block';
-            if (!html5QrCodeReceive) html5QrCodeReceive = new Html5Qrcode("reader-receive");
-            html5QrCodeReceive.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 150 } }, (decodedText) => {
-                triggerFeedback(); document.getElementById('receive-barcode').value = decodedText; toggleReceiveScanner(); checkExistingItem(); 
-            }).catch(err => { document.getElementById('reader-receive').innerHTML = `<div style='color:#ff3b30; padding: 20px;'>ไม่พบกล้อง</div>`; });
+        if (isReceiveScannerOpen) { if (html5QrCodeReceive && html5QrCodeReceive.isScanning) { html5QrCodeReceive.stop().then(() => { container.style.display = 'none'; isReceiveScannerOpen = false; }).catch(err => {}); } else { container.style.display = 'none'; isReceiveScannerOpen = false; } } 
+        else {
+            container.style.display = 'block'; if (!html5QrCodeReceive) html5QrCodeReceive = new Html5Qrcode("reader-receive");
+            html5QrCodeReceive.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 150 } }, (decodedText) => { triggerFeedback(); document.getElementById('receive-barcode').value = decodedText; toggleReceiveScanner(); checkExistingItem(); }).catch(err => { document.getElementById('reader-receive').innerHTML = `<div style='color:#ff3b30; padding: 20px;'>ไม่พบกล้อง</div>`; });
             isReceiveScannerOpen = true;
         }
     }
 
     function toggleCatalogScanner() {
         const container = document.getElementById('catalog-scanner-container');
-        if (isCatalogScannerOpen) {
-            if (html5QrCodeCatalog && html5QrCodeCatalog.isScanning) { html5QrCodeCatalog.stop().then(() => { container.style.display = 'none'; isCatalogScannerOpen = false; }).catch(err => {}); } 
-            else { container.style.display = 'none'; isCatalogScannerOpen = false; }
-        } else {
-            container.style.display = 'block';
-            if (!html5QrCodeCatalog) html5QrCodeCatalog = new Html5Qrcode("reader-catalog");
-            html5QrCodeCatalog.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 150 } }, (decodedText) => {
-                triggerFeedback(); document.getElementById('catalog-search').value = decodedText; toggleCatalogScanner(); renderCatalog(); 
-            }).catch(err => { document.getElementById('reader-catalog').innerHTML = `<div style='color:#ff3b30; padding: 20px;'>ไม่พบกล้อง</div>`; });
+        if (isCatalogScannerOpen) { if (html5QrCodeCatalog && html5QrCodeCatalog.isScanning) { html5QrCodeCatalog.stop().then(() => { container.style.display = 'none'; isCatalogScannerOpen = false; }).catch(err => {}); } else { container.style.display = 'none'; isCatalogScannerOpen = false; } } 
+        else {
+            container.style.display = 'block'; if (!html5QrCodeCatalog) html5QrCodeCatalog = new Html5Qrcode("reader-catalog");
+            html5QrCodeCatalog.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 150 } }, (decodedText) => { triggerFeedback(); document.getElementById('catalog-search').value = decodedText; toggleCatalogScanner(); renderCatalog(); }).catch(err => { document.getElementById('reader-catalog').innerHTML = `<div style='color:#ff3b30; padding: 20px;'>ไม่พบกล้อง</div>`; });
             isCatalogScannerOpen = true;
         }
     }
 
-    function sendToGoogleSheet(actionType, itemName, itemQty) {
+    // แก้ไขฟังก์ชันนี้ให้ส่งทั้ง user (ผู้บันทึก) และ picker (ผู้เบิก)
+    function sendToGoogleSheet(actionType, itemName, itemQty, pickerName = "-") {
         fetch(GOOGLE_SHEET_URL, {
             redirect: "follow", method: 'POST', mode: 'no-cors', headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ user: currentUser, action: actionType, item: itemName, qty: itemQty })
+            body: JSON.stringify({ 
+                user: currentUser,   // คอลัมน์ผู้บันทึก
+                picker: pickerName,   // คอลัมน์ผู้เบิก
+                action: actionType, 
+                item: itemName, 
+                qty: itemQty 
+            })
         }).catch(error => console.error("Error ส่งข้อมูล:", error));
     }
 
     function syncLowStockToSheet() {
         let lowStockItems = stockCatalog.filter(item => item.qty <= 5);
-        fetch(GOOGLE_SHEET_URL, {
-            redirect: "follow", method: 'POST', mode: 'no-cors', headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ type: "sync_low_stock", items: lowStockItems })
-        }).catch(err => console.error(err));
+        fetch(GOOGLE_SHEET_URL, { redirect: "follow", method: 'POST', mode: 'no-cors', headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ type: "sync_low_stock", items: lowStockItems }) }).catch(err => console.error(err));
     }
 
     function checkExistingItem() {
@@ -561,21 +507,13 @@
         let existingItem = null;
         if(barcodeInput) { existingItem = stockCatalog.find(item => item.barcode === barcodeInput || item.name === barcodeInput); }
         if(!existingItem && nameInput) { existingItem = stockCatalog.find(item => item.name === nameInput || item.barcode === nameInput); }
-        
-        const infoBox = document.getElementById('existing-item-info');
-        const btnNew = document.getElementById('btn-save-new');
-        const btnEdit = document.getElementById('btn-group-edit');
-        
+        const infoBox = document.getElementById('existing-item-info'); const btnNew = document.getElementById('btn-save-new'); const btnEdit = document.getElementById('btn-group-edit');
         if (existingItem) {
             if(existingItem.name && existingItem.name !== barcodeInput && document.getElementById('receive-name').value === '') { document.getElementById('receive-name').value = existingItem.name; }
             if(existingItem.barcode && document.getElementById('receive-barcode').value === '') { document.getElementById('receive-barcode').value = existingItem.barcode; }
-            infoBox.style.display = 'block';
-            infoBox.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> <b>พบสินค้าเดิมในระบบ:</b><br>มียอดคงเหลือ <b>${existingItem.qty} ${existingItem.unit || 'ชิ้น'}</b>`;
-            document.getElementById('receive-unit').value = existingItem.unit || 'ชิ้น';
-            btnNew.style.display = 'none'; btnEdit.style.display = 'flex'; 
-        } else {
-            infoBox.style.display = 'none'; btnNew.style.display = 'block'; btnEdit.style.display = 'none';
-        }
+            infoBox.style.display = 'block'; infoBox.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> <b>พบสินค้าเดิมในระบบ:</b><br>มียอดคงเหลือ <b>${existingItem.qty} ${existingItem.unit || 'ชิ้น'}</b>`;
+            document.getElementById('receive-unit').value = existingItem.unit || 'ชิ้น'; btnNew.style.display = 'none'; btnEdit.style.display = 'flex'; 
+        } else { infoBox.style.display = 'none'; btnNew.style.display = 'block'; btnEdit.style.display = 'none'; }
     }
 
     function processStock(action) {
@@ -583,7 +521,6 @@
         const nameInput = document.getElementById('receive-name').value.trim();
         const qtyInput = parseInt(document.getElementById('receive-qty').value);
         const unitInput = document.getElementById('receive-unit').value;
-
         if(!nameInput && !barcodeInput) { Swal.fire({icon: 'warning', title: 'ข้อมูลไม่ครบ', text: 'กรุณากรอกรหัสบาร์โค้ดหรือชื่อสินค้า', background: '#2c2c2e', color: '#fff'}); return; }
         if(isNaN(qtyInput) || qtyInput < 0) { Swal.fire({icon: 'warning', title: 'ระบุจำนวน', text: 'กรุณากรอกจำนวนตัวเลขให้ถูกต้อง', background: '#2c2c2e', color: '#fff'}); return; }
 
@@ -591,41 +528,18 @@
         if(barcodeInput) { existingItem = stockCatalog.find(item => item.barcode === barcodeInput || item.name === barcodeInput); }
         if(!existingItem && nameInput) { existingItem = stockCatalog.find(item => item.name === nameInput || item.barcode === nameInput); }
 
-        let logAction = ''; 
-        let finalQtyForSheet = 0; 
-
+        let logAction = ''; let finalQtyForSheet = 0; 
         if (action === 'new') {
-            if (existingItem) { Swal.fire({icon:'error', title:'มีสินค้านี้อยู่แล้ว', background:'#2c2c2e', color:'#fff'}); return; }
-            if (qtyInput <= 0) { Swal.fire({icon:'warning', title:'จำนวนต้องมากกว่า 0', background:'#2c2c2e', color:'#fff'}); return; }
-            
             const finalName = nameInput || barcodeInput; 
             stockCatalog.push({ barcode: barcodeInput, name: finalName, qty: qtyInput, unit: unitInput });
             logAction = 'รับเข้า (ของใหม่)'; finalQtyForSheet = qtyInput;
-            Swal.fire({icon: 'success', title: 'เพิ่มรายการใหม่สำเร็จ!', text: `${finalName} จำนวน ${qtyInput} ${unitInput}`, background: '#2c2c2e', color: '#fff', confirmButtonColor: '#34c759'});
         } else if (action === 'add') {
-            if (qtyInput <= 0) { Swal.fire({icon:'warning', title:'จำนวนต้องมากกว่า 0', background:'#2c2c2e', color:'#fff'}); return; }
-            existingItem.qty += qtyInput; 
-            existingItem.unit = unitInput; 
-            existingItem.name = nameInput || existingItem.name; 
-            existingItem.barcode = barcodeInput || existingItem.barcode; 
-            logAction = 'เพิ่มสต็อก'; finalQtyForSheet = qtyInput;
-            Swal.fire({icon: 'success', title: 'เพิ่มสต็อกสำเร็จ!', text: `ยอดรวมปัจจุบัน: ${existingItem.qty} ${unitInput}`, background: '#2c2c2e', color: '#fff', confirmButtonColor: '#34c759'});
+            existingItem.qty += qtyInput; logAction = 'เพิ่มสต็อก'; finalQtyForSheet = qtyInput;
         } else if (action === 'reduce') {
-            if (qtyInput <= 0) { Swal.fire({icon:'warning', title:'จำนวนต้องมากกว่า 0', background:'#2c2c2e', color:'#fff'}); return; }
             if (existingItem.qty < qtyInput) { Swal.fire({icon:'error', title:'ทำรายการไม่ได้!', text: 'ยอดในสต็อกมีไม่พอ', background:'#2c2c2e', color:'#fff'}); return; }
-            existingItem.qty -= qtyInput; 
-            existingItem.unit = unitInput; 
-            existingItem.name = nameInput || existingItem.name; 
-            existingItem.barcode = barcodeInput || existingItem.barcode;
-            logAction = 'ลดสต็อก (แก้ไข)'; finalQtyForSheet = qtyInput;
-            Swal.fire({icon: 'success', title: 'ลดสต็อกสำเร็จ!', text: `คงเหลือ: ${existingItem.qty} ${unitInput}`, background: '#2c2c2e', color: '#fff', confirmButtonColor: '#34c759'});
+            existingItem.qty -= qtyInput; logAction = 'ลดสต็อก (แก้ไข)'; finalQtyForSheet = qtyInput;
         } else if (action === 'edit') {
-            existingItem.qty = qtyInput; 
-            existingItem.unit = unitInput; 
-            existingItem.name = nameInput || existingItem.name; 
-            existingItem.barcode = barcodeInput || existingItem.barcode;
-            logAction = 'แก้ไขยอดสุทธิ'; finalQtyForSheet = qtyInput;
-            Swal.fire({icon: 'success', title: 'อัปเดตยอดสำเร็จ!', text: `แก้ไขยอดเป็น ${qtyInput} ${unitInput} เรียบร้อย`, background: '#2c2c2e', color: '#fff', confirmButtonColor: '#34c759'});
+            existingItem.qty = qtyInput; logAction = 'แก้ไขยอดสุทธิ'; finalQtyForSheet = qtyInput;
         }
 
         let actualNameForSheet = existingItem ? existingItem.name : (nameInput || barcodeInput);
@@ -633,16 +547,12 @@
         let displayNameForSheet = actualBarcodeForSheet && actualNameForSheet !== actualBarcodeForSheet ? `[${actualBarcodeForSheet}] ${actualNameForSheet}` : actualNameForSheet;
 
         localStorage.setItem('stockFlowCatalog', JSON.stringify(stockCatalog));
-        sendToGoogleSheet(logAction, displayNameForSheet, finalQtyForSheet + ' ' + unitInput);
-        
+        // สำหรับการรับของเข้า ให้ Picker เป็นชื่อผู้บันทึก หรือขีดไว้ก็ได้
+        sendToGoogleSheet(logAction, displayNameForSheet, finalQtyForSheet + ' ' + unitInput, currentUser);
         syncLowStockToSheet();
-
-        document.getElementById('receive-barcode').value = ''; 
-        document.getElementById('receive-name').value = ''; 
-        document.getElementById('receive-qty').value = ''; 
-        document.getElementById('receive-unit').value = 'ชิ้น';
-        checkExistingItem(); 
-        navigate('home');
+        document.getElementById('receive-barcode').value = ''; document.getElementById('receive-name').value = ''; document.getElementById('receive-qty').value = ''; document.getElementById('receive-unit').value = 'ชิ้น';
+        checkExistingItem(); navigate('home');
+        Toast.fire({ icon: 'success', title: 'บันทึกสต็อกสำเร็จ' });
     }
 
     function renderHome() {
@@ -663,85 +573,35 @@
         let filteredCatalog = stockCatalog;
         if(searchTerm) { filteredCatalog = stockCatalog.filter(item => (item.name && item.name.toLowerCase().includes(searchTerm)) || (item.barcode && item.barcode.toLowerCase().includes(searchTerm)) ); }
         if(filteredCatalog.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fa-solid fa-box-open" style="font-size: 40px; margin-bottom: 10px;"></i><br>ไม่พบสินค้า</div>'; return; }
-
         filteredCatalog.forEach((item) => {
             let originalIndex = stockCatalog.indexOf(item);
             let unitText = item.unit || 'ชิ้น'; let displayName = item.name || item.barcode || 'ไม่มีชื่อสินค้า';
             let barcodeText = (item.barcode && item.barcode !== item.name) ? `<span style="color:#8e8e93; font-size:11px;"><i class="fa-solid fa-barcode"></i> ${item.barcode}</span>` : '';
             let status = item.qty > 0 ? `<span class="text-green" style="font-size:14px; font-weight:500;">เหลือ ${item.qty} ${unitText}</span>` : `<span class="text-red" style="font-size:14px; font-weight:500;">หมดสต็อก</span>`;
-            list.innerHTML += `
-                <div class="recent-item" style="align-items: flex-start; flex-direction: column; gap: 8px;">
-                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-                        <strong style="font-size: 15px; color: #4da6ff;">${displayName}</strong>
-                        <div style="display: flex; align-items: center; gap: 15px;">
-                            ${status}
-                            <i class="fa-solid fa-trash" onclick="deleteCatalogItem(${originalIndex})" style="color: #ff3b30; cursor: pointer; font-size: 16px; padding: 5px;" title="ลบสินค้า"></i>
-                        </div>
-                    </div>
-                    <div>${barcodeText}</div>
-                </div>`;
+            list.innerHTML += `<div class="recent-item" style="align-items: flex-start; flex-direction: column; gap: 8px;"><div style="display: flex; justify-content: space-between; width: 100%; align-items: center;"><strong style="font-size: 15px; color: #4da6ff;">${displayName}</strong><div style="display: flex; align-items: center; gap: 15px;">${status}<i class="fa-solid fa-trash" onclick="deleteCatalogItem(${originalIndex})" style="color: #ff3b30; cursor: pointer; font-size: 16px; padding: 5px;"></i></div></div><div>${barcodeText}</div></div>`;
         });
     }
 
     function deleteCatalogItem(index) {
-        let itemToDel = stockCatalog[index];
-        let displayName = itemToDel.name || itemToDel.barcode || 'สินค้านี้';
-        Swal.fire({
-            title: 'ยืนยันการลบ', text: `ต้องการลบ "${displayName}" ออกจากคลังสินค้าใช่หรือไม่?`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#ff3b30', cancelButtonColor: '#3a3a3c', confirmButtonText: 'ใช่, ลบเลย', cancelButtonText: 'ยกเลิก', background: '#2c2c2e', color: '#fff'
-        }).then((result) => {
-            if (result.isConfirmed) { 
-                stockCatalog.splice(index, 1); 
-                localStorage.setItem('stockFlowCatalog', JSON.stringify(stockCatalog)); 
-                renderCatalog(); syncLowStockToSheet();
-                Toast.fire({ icon: 'success', title: 'ลบรายการสำเร็จ' }); 
-            }
-        });
+        let itemToDel = stockCatalog[index]; let displayName = itemToDel.name || itemToDel.barcode || 'สินค้านี้';
+        Swal.fire({ title: 'ยืนยันการลบ', text: `ต้องการลบ "${displayName}" ออกจากคลัง?`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#ff3b30', cancelButtonColor: '#3a3a3c', confirmButtonText: 'ใช่, ลบเลย', background: '#2c2c2e', color: '#fff' }).then((result) => { if (result.isConfirmed) { stockCatalog.splice(index, 1); localStorage.setItem('stockFlowCatalog', JSON.stringify(stockCatalog)); renderCatalog(); syncLowStockToSheet(); Toast.fire({ icon: 'success', title: 'ลบรายการสำเร็จ' }); } });
     }
 
     function clearCatalog() {
-        Swal.fire({
-            title: 'อันตราย!', text: "ต้องการล้างคลังสินค้าทั้งหมดใช่หรือไม่?", icon: 'warning', showCancelButton: true, confirmButtonColor: '#ff3b30', cancelButtonColor: '#3a3a3c', confirmButtonText: 'ล้างข้อมูล', cancelButtonText: 'ยกเลิก', background: '#2c2c2e', color: '#fff'
-        }).then((result) => {
-            if (result.isConfirmed) { 
-                stockCatalog = []; 
-                localStorage.removeItem('stockFlowCatalog'); 
-                renderCatalog(); 
-                syncLowStockToSheet();
-                Toast.fire({ icon: 'success', title: 'ล้างคลังสินค้าเรียบร้อย' }); 
-            }
-        });
+        Swal.fire({ title: 'อันตราย!', text: "ต้องการล้างคลังสินค้าทั้งหมดใช่หรือไม่?", icon: 'warning', showCancelButton: true, confirmButtonColor: '#ff3b30', cancelButtonColor: '#3a3a3c', confirmButtonText: 'ล้างข้อมูล', background: '#2c2c2e', color: '#fff' }).then((result) => { if (result.isConfirmed) { stockCatalog = []; localStorage.removeItem('stockFlowCatalog'); renderCatalog(); syncLowStockToSheet(); Toast.fire({ icon: 'success', title: 'ล้างคลังสินค้าเรียบร้อย' }); } });
     }
 
     function renderHistory() {
-        const list = document.getElementById('history-list');
+        const list = document.getElementById('history-list'); if(!list) return;
         list.innerHTML = '';
-        if(orderHistory.length === 0) {
-            list.innerHTML = '<div class="empty-state"><i class="fa-solid fa-clock-rotate-left" style="font-size: 40px; margin-bottom: 10px;"></i><br>ยังไม่มีประวัติการเบิกสินค้า</div>';
-            return;
-        }
+        if(orderHistory.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fa-solid fa-clock-rotate-left" style="font-size: 40px; margin-bottom: 10px;"></i><br>ยังไม่มีประวัติ</div>'; return; }
         orderHistory.forEach(record => {
-            list.innerHTML += `
-                <div style="background: #2c2c2e; border-radius: 12px; padding: 15px;">
-                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #3a3a3c; padding-bottom: 10px; margin-bottom: 10px;">
-                        <span style="font-size: 12px; color: #8e8e93;"><i class="fa-regular fa-calendar"></i> ${record.date}</span>
-                        <span style="font-size: 12px; color: #34c759;"><i class="fa-solid fa-check-circle"></i> สำเร็จ</span>
-                    </div>
-                    <div style="font-size: 14px; margin-bottom: 10px; line-height: 1.5;">
-                        <b>ผู้เบิก:</b> ${record.user}<br>
-                        <b>รายการที่เบิก:</b><br>${record.items}
-                    </div>
-                    <div>
-                        <span style="font-size: 12px; color: #8e8e93;">ลายเซ็นผู้รับ:</span><br>
-                        <img src="${record.signature}" style="background: #fff; width: 120px; height: auto; border-radius: 8px; margin-top: 5px; border: 1px solid #ccc;">
-                    </div>
-                </div>
-            `;
+            list.innerHTML += `<div style="background: #2c2c2e; border-radius: 12px; padding: 15px; margin-bottom:10px;"><div style="display: flex; justify-content: space-between; border-bottom: 1px solid #3a3a3c; padding-bottom: 10px; margin-bottom: 10px;"><span style="font-size: 12px; color: #8e8e93;"><i class="fa-regular fa-calendar"></i> ${record.date}</span><span style="font-size: 12px; color: #34c759;"><i class="fa-solid fa-check-circle"></i> สำเร็จ</span></div><div style="font-size: 14px; margin-bottom: 10px; line-height: 1.5;"><b>ผู้เบิก:</b> ${record.picker || record.user}<br><b>รายการ:</b><br>${record.items}</div><div><span style="font-size: 12px; color: #8e8e93;">ลายเซ็น:</span><br><img src="${record.signature}" style="background: #fff; width: 120px; border-radius: 8px; margin-top: 5px;"></div></div>`;
         });
     }
 
     function startRealScanner() {
-        document.getElementById('scan-popup').style.display = 'none';
-        if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
+        document.getElementById('scan-popup').style.display = 'none'; if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
         html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 150 } }, onScanSuccess).catch(err => { document.getElementById('reader').innerHTML = `<div style='color:#ff3b30; text-align:center; padding: 50px 20px;'>อนุญาตการเข้าถึงกล้องเพื่อใช้งาน<br></div>`; });
     }
 
@@ -769,39 +629,22 @@
     function updateQty(amount) { if(currentQty + amount > 0) { currentQty += amount; document.getElementById('scan-qty').innerText = currentQty; } }
 
     function addToCart() {
-        const itemName = document.getElementById('scan-item-name').innerText;
-        const skuInfo = document.getElementById('scan-item-sku').innerText;
-        const currentUnit = document.getElementById('scan-unit').innerText;
-        const itemBarcode = document.getElementById('scan-hidden-barcode').value;
-
+        const itemName = document.getElementById('scan-item-name').innerText; const skuInfo = document.getElementById('scan-item-sku').innerText; const currentUnit = document.getElementById('scan-unit').innerText; const itemBarcode = document.getElementById('scan-hidden-barcode').value;
         if(skuInfo.includes("อยู่นอกระบบ")) { Swal.fire({icon: 'error', title: 'เบิกไม่ได้!', text: 'คุณยังไม่เคยรับสินค้านี้เข้าสต็อก', background: '#2c2c2e', color: '#fff'}); return; }
-        
         const existingItemIndex = cart.findIndex(item => item.name === itemName || (item.barcode && item.barcode === itemBarcode));
         if(existingItemIndex > -1) { cart[existingItemIndex].qty += currentQty; } else { cart.push({ barcode: itemBarcode, name: itemName, qty: currentQty, unit: currentUnit }); }
         localStorage.setItem('stockFlowCart', JSON.stringify(cart));
-        Toast.fire({ icon: 'success', title: `เพิ่ม ${itemName} ลงตะกร้าแล้ว` });
+        Toast.fire({ icon: 'success', title: `เพิ่ม ${itemName} ลงตะกร้า` });
         closePopup(); updateCartCount();
     }
 
     function renderCart() {
-        const container = document.getElementById('cart-container');
-        const checkoutSection = document.getElementById('checkout-section');
-        container.innerHTML = ''; 
-
-        if(cart.length === 0) {
-            container.innerHTML = '<div class="empty-state"><i class="fa-solid fa-cart-shopping" style="font-size: 40px; margin-bottom: 10px;"></i><br>ตะกร้าว่างเปล่า</div>';
-            checkoutSection.style.display = 'none'; return;
-        }
-
+        const container = document.getElementById('cart-container'); const checkoutSection = document.getElementById('checkout-section'); container.innerHTML = ''; 
+        if(cart.length === 0) { container.innerHTML = '<div class="empty-state"><i class="fa-solid fa-cart-shopping" style="font-size: 40px; margin-bottom: 10px;"></i><br>ตะกร้าว่างเปล่า</div>'; checkoutSection.style.display = 'none'; return; }
         checkoutSection.style.display = 'block'; 
-
         cart.forEach((item, index) => {
             let unitText = item.unit || 'ชิ้น'; let displayName = item.name || item.barcode;
-            container.innerHTML += `
-                <div class="cart-item">
-                    <div class="cart-item-details"><h4>${displayName}</h4><p>จำนวนเบิก: ${item.qty} ${unitText}</p></div>
-                    <i class="fa-solid fa-trash delete-btn" onclick="removeItem(${index})"></i>
-                </div>`;
+            container.innerHTML += `<div class="cart-item"><div class="cart-item-details"><h4>${displayName}</h4><p>จำนวนเบิก: ${item.qty} ${unitText}</p></div><i class="fa-solid fa-trash delete-btn" onclick="removeItem(${index})"></i></div>`;
         });
     }
 
@@ -809,19 +652,19 @@
 
     function clearCart() {
         if(cart.length === 0) return;
-        Swal.fire({ title: 'ล้างตะกร้า', text: "ต้องการล้างรายการเบิกทั้งหมดใช่หรือไม่?", icon: 'warning', showCancelButton: true, confirmButtonColor: '#ff3b30', cancelButtonColor: '#3a3a3c', confirmButtonText: 'ล้างข้อมูล', cancelButtonText: 'ยกเลิก', background: '#2c2c2e', color: '#fff'
-        }).then((result) => { if (result.isConfirmed) { cart = []; localStorage.removeItem('stockFlowCart'); renderCart(); updateCartCount(); clearSignature(); } });
+        Swal.fire({ title: 'ล้างตะกร้า', text: "ต้องการล้างรายการเบิกใช่หรือไม่?", icon: 'warning', showCancelButton: true, confirmButtonColor: '#ff3b30', background: '#2c2c2e', color: '#fff' }).then((result) => { if (result.isConfirmed) { cart = []; localStorage.removeItem('stockFlowCart'); renderCart(); updateCartCount(); clearSignature(); document.getElementById('picker-name').value = ''; } });
     }
 
-    function updateCartCount() {
-        const cartCountDisplay = cart.length > 0 ? ` (${cart.length})` : '';
-        document.getElementById('cart-count').innerText = `ตะกร้า${cartCountDisplay}`;
-    }
+    function updateCartCount() { const cartCountDisplay = cart.length > 0 ? ` (${cart.length})` : ''; document.getElementById('cart-count').innerText = `ตะกร้า${cartCountDisplay}`; }
 
+    // ฟังก์ชันยืนยันการเบิก พร้อมส่งชื่อคนเบิกแยกกัน
     function confirmOrder() {
-        if(cart.length === 0) { Swal.fire({icon: 'warning', title: 'ตะกร้าว่างเปล่า', text: 'ไม่มีรายการให้เบิก', background: '#2c2c2e', color: '#fff'}); return; }
+        if(cart.length === 0) return;
         
-        if(!hasSignature) { Swal.fire({icon: 'warning', title: 'กรุณาเซ็นชื่อ', text: 'ต้องเซ็นชื่อรับของก่อนยืนยันการเบิก', background: '#2c2c2e', color: '#fff'}); return; }
+        const pickerNameInput = document.getElementById('picker-name').value.trim();
+        if(!pickerNameInput) { Swal.fire({icon: 'warning', title: 'ระบุชื่อผู้เบิก', text: 'กรุณากรอกชื่อผู้รับของ/ผู้เบิกสินค้าก่อนยืนยัน', background: '#2c2c2e', color: '#fff'}); return; }
+        
+        if(!hasSignature) { Swal.fire({icon: 'warning', title: 'กรุณาเซ็นชื่อ', text: 'ต้องเซ็นชื่อรับของก่อนยืนยัน', background: '#2c2c2e', color: '#fff'}); return; }
 
         const signatureImage = canvas.toDataURL("image/jpeg", 0.8);
         let itemsListText = cart.map(c => `- ${c.name || c.barcode} (x${c.qty} ${c.unit || 'ชิ้น'})`).join('<br>');
@@ -832,33 +675,29 @@
             let displayNameForSheet = cartItem.barcode && cartItem.name !== cartItem.barcode ? `[${cartItem.barcode}] ${cartItem.name}` : (cartItem.name || cartItem.barcode);
             
             if(stockItem) { stockItem.qty -= cartItem.qty; if(stockItem.qty < 0) stockItem.qty = 0; }
-            sendToGoogleSheet('เบิกออก (เซ็นรับแล้ว)', displayNameForSheet, cartItem.qty + ' ' + unitText);
+            
+            // ส่งข้อมูลไปยังชีต: action, item, qty, pickerName
+            sendToGoogleSheet('เบิกออก (เซ็นรับแล้ว)', displayNameForSheet, cartItem.qty + ' ' + unitText, pickerNameInput);
         });
 
         localStorage.setItem('stockFlowCatalog', JSON.stringify(stockCatalog));
-        
         syncLowStockToSheet();
 
-        const orderRecord = { date: new Date().toLocaleString('th-TH'), user: currentUser, items: itemsListText, signature: signatureImage };
-        orderHistory.unshift(orderRecord); 
-        if (orderHistory.length > 30) orderHistory.pop(); 
+        const orderRecord = { date: new Date().toLocaleString('th-TH'), user: currentUser, picker: pickerNameInput, items: itemsListText, signature: signatureImage };
+        orderHistory.unshift(orderRecord); if (orderHistory.length > 30) orderHistory.pop(); 
         localStorage.setItem('stockFlowHistory', JSON.stringify(orderHistory));
         
-        Swal.fire({ icon: 'success', title: 'บันทึกสำเร็จ!', text: 'เบิกของและหักสต็อกเรียบร้อยแล้ว', background: '#2c2c2e', color: '#fff', confirmButtonColor: '#34c759' });
+        Swal.fire({ icon: 'success', title: 'บันทึกสำเร็จ!', text: 'หักสต็อกและบันทึกประวัติแล้ว', background: '#2c2c2e', color: '#fff' });
 
-        cart = []; localStorage.removeItem('stockFlowCart'); clearSignature(); navigate('home'); updateCartCount();
+        cart = []; localStorage.removeItem('stockFlowCart'); 
+        document.getElementById('picker-name').value = '';
+        clearSignature(); navigate('home'); updateCartCount();
     }
 
     document.addEventListener('keypress', function(e) {
         if(document.getElementById('view-scan').classList.contains('active') && document.getElementById('scan-popup').style.display === 'none') {
-            if(e.key === 'Enter') {
-                const scannedCode = window.globalBarcodeBuffer || '';
-                if(scannedCode) { onScanSuccess(scannedCode); window.globalBarcodeBuffer = ''; }
-            } else {
-                window.globalBarcodeBuffer = (window.globalBarcodeBuffer || '') + e.key;
-                clearTimeout(window.barcodeTimeout);
-                window.barcodeTimeout = setTimeout(() => { window.globalBarcodeBuffer = ''; }, 500);
-            }
+            if(e.key === 'Enter') { const scannedCode = window.globalBarcodeBuffer || ''; if(scannedCode) { onScanSuccess(scannedCode); window.globalBarcodeBuffer = ''; } } 
+            else { window.globalBarcodeBuffer = (window.globalBarcodeBuffer || '') + e.key; clearTimeout(window.barcodeTimeout); window.barcodeTimeout = setTimeout(() => { window.globalBarcodeBuffer = ''; }, 500); }
         }
     });
 </script>
