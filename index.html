@@ -47,19 +47,26 @@
         #view-login { justify-content: center; align-items: center; padding: 30px; text-align: center; }
         .login-logo-img { width: 240px; height: auto; object-fit: contain; margin: 0 auto 20px auto; mix-blend-mode: screen !important; }
 
-        .user-card { background-color: #2c2c2e; margin: 10px 20px; padding: 15px; border-radius: 12px; display: flex; gap: 15px; align-items: center; }
+        /* ปรับให้เล็กและประหยัดพื้นที่ขึ้น */
+        .user-card { background-color: #2c2c2e; margin: 5px 20px 10px; padding: 10px 15px; border-radius: 12px; display: flex; gap: 15px; align-items: center; }
         .user-avatar { width: 40px; height: 40px; background-color: #3a3a3c; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
         
-        .action-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px 25px; padding: 20px; text-align: center; font-size: 12px; color: #aeaeb2; }
-        .action-grid > div { width: 70px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: all 0.2s ease; }
+        /* เปลี่ยนเป็น Grid 4 คอลัมน์ แถวเดียว */
+        .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px 10px; padding: 10px 20px; text-align: center; font-size: 11px; color: #aeaeb2; }
+        .action-grid > div { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: all 0.2s ease; }
         .action-grid > div:active { transform: scale(0.92); opacity: 0.8; }
         
-        .btn-circle { width: 60px; height: 60px; border-radius: 50%; border: none; color: white; font-size: 24px; display: flex; justify-content: center; align-items: center; cursor: pointer; margin-bottom: 10px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        /* ปรับปุ่มให้เล็กลง เพื่อเรียง 4 อันได้พอดี */
+        .btn-circle { width: 48px; height: 48px; border-radius: 50%; border: none; color: white; font-size: 18px; display: flex; justify-content: center; align-items: center; cursor: pointer; margin-bottom: 8px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .btn-circle:hover { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 6px 15px rgba(0,0,0,0.3); }
         
         .recent-section { padding: 15px 20px; }
         .recent-item { background: #2c2c2e; padding: 12px 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; transition: transform 0.2s ease, background 0.2s ease; }
         .recent-item:active { transform: scale(0.98); background: #3a3a3c; }
+
+        /* ป้ายกำกับแจ้งเตือนสีแดงและเหลือง */
+        .badge-danger { background-color: rgba(255, 59, 48, 0.15); color: #ff3b30; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+        .badge-warning { background-color: rgba(255, 214, 10, 0.15); color: #ffd60a; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
 
         .scan-area { flex: 1; display: flex; justify-content: center; align-items: center; flex-direction: column; background: #000; position: relative; }
         .popup-card { background: #2c2c2e; padding: 20px calc(20px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-bottom)); border-radius: 15px 15px 0 0; position: absolute; bottom: 0; width: 100%; display: none; z-index: 20; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); animation: slideUp 0.3s ease forwards; }
@@ -507,7 +514,7 @@
         if(viewId === 'receive') { 
             document.getElementById('receive-barcode').value = ''; 
             document.getElementById('receive-name').value = ''; 
-            document.getElementById('receive-category').value = ''; // เพิ่มการล้างค่าหมวดหมู่
+            document.getElementById('receive-category').value = ''; 
             document.getElementById('receive-qty').value = ''; 
             document.getElementById('receive-unit').value = 'ชิ้น'; 
             checkExistingItem(); 
@@ -681,7 +688,7 @@
                         if(existing) { 
                             existing.name = dbItem.name || existing.name; 
                             existing.barcode = dbItem.barcode || existing.barcode; 
-                            if(dbItem.category) existing.category = dbItem.category; // อัปเดตหมวดหมู่จาก Cloud ถ้ามี
+                            if(dbItem.category) existing.category = dbItem.category; 
                             if(updateQuantity) existing.qty = dbItem.qty !== undefined ? parseInt(dbItem.qty) : existing.qty;
                             existing.updatedAt = now; 
                             updated++; 
@@ -690,7 +697,7 @@
                             stockCatalog.push({ 
                                 barcode: dbItem.barcode, 
                                 name: dbItem.name, 
-                                category: dbItem.category || '', // เพิ่มหมวดหมู่
+                                category: dbItem.category || '', 
                                 qty: dbItem.qty !== undefined ? parseInt(dbItem.qty) : 0, 
                                 unit: dbItem.unit || 'ชิ้น', 
                                 updatedAt: now 
@@ -743,7 +750,7 @@
     function processStock(action) {
         const b = document.getElementById('receive-barcode').value.trim(); 
         const n = document.getElementById('receive-name').value.trim(); 
-        const c = document.getElementById('receive-category').value.trim(); // รับค่าหมวดหมู่
+        const c = document.getElementById('receive-category').value.trim(); 
         const q = parseInt(document.getElementById('receive-qty').value); 
         const u = document.getElementById('receive-unit').value;
         
@@ -772,19 +779,36 @@
         
         document.getElementById('receive-barcode').value = ''; 
         document.getElementById('receive-name').value = ''; 
-        document.getElementById('receive-category').value = ''; // เคลียร์ช่องหมวดหมู่
+        document.getElementById('receive-category').value = ''; 
         document.getElementById('receive-qty').value = ''; 
         checkExistingItem(); navigate('home'); Toast.fire({ icon: 'success', title: 'บันทึกสต็อกสำเร็จ' });
     }
 
+    // อัปเดตโค้ดในฟังก์ชัน renderHome ตรงนี้แล้วครับ
     function renderHome() {
         const summary = document.getElementById('dashboard-summary');
-        if(stockCatalog.length === 0) { summary.innerHTML = '<div class="empty-state">ยังไม่มีข้อมูลสินค้า<br>กด "รับเข้า" เพื่อเริ่มใช้งาน</div>'; return; }
+        if(stockCatalog.length === 0) { 
+            summary.innerHTML = '<div class="empty-state">ยังไม่มีข้อมูลสินค้า<br>กด "รับเข้า" เพื่อเริ่มใช้งาน</div>'; 
+            return; 
+        }
+        
         summary.innerHTML = `<div class="recent-item" style="border-left: 4px solid #007aff;">รายการสินค้าคลังหลัก <b>${stockCatalog.length} รายการ</b></div>`;
+        
         stockCatalog.forEach(item => {
             let u = item.unit || 'ชิ้น'; let n = item.name || item.barcode;
-            if(item.qty > 0 && item.qty <= 5) { summary.innerHTML += `<div class="recent-item" style="border-left: 4px solid #ffd60a;">${n} ใกล้หมด <span class="text-yellow">เหลือ ${item.qty} ${u}</span></div>`; } 
-            else if(item.qty <= 0) { summary.innerHTML += `<div class="recent-item" style="border-left: 4px solid #ff3b30;">${n} <span class="text-red">หมดสต็อก!</span></div>`; }
+            
+            if(item.qty > 0 && item.qty <= 5) { 
+                summary.innerHTML += `<div class="recent-item" style="border-left: 4px solid #ffd60a; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 65%;">${n}</span> 
+                    <span class="badge-warning">เหลือ ${item.qty} ${u}</span>
+                </div>`; 
+            } 
+            else if(item.qty <= 0) { 
+                summary.innerHTML += `<div class="recent-item" style="border-left: 4px solid #ff3b30; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 65%;">${n}</span> 
+                    <span class="badge-danger">หมดสต็อก!</span>
+                </div>`; 
+            }
         });
     }
 
@@ -792,7 +816,6 @@
         const list = document.getElementById('catalog-list'); const s = document.getElementById('catalog-search') ? document.getElementById('catalog-search').value.toLowerCase() : '';
         list.innerHTML = ''; let fc = stockCatalog;
         
-        // กรองการค้นหาโดยรวมการเช็คหมวดหมู่เข้าไปด้วย
         if(s) fc = stockCatalog.filter(i => (i.name && i.name.toLowerCase().includes(s)) || (i.barcode && i.barcode.toLowerCase().includes(s)) || (i.category && i.category.toLowerCase().includes(s)));
         if(fc.length === 0) { list.innerHTML = '<div class="empty-state">ไม่พบสินค้า</div>'; return; }
         
@@ -802,7 +825,6 @@
             let stat = i.qty > 0 ? `<span class="text-green" style="font-size:14px; font-weight:500;">เหลือ ${i.qty} ${u}</span>` : `<span class="text-red" style="font-size:14px; font-weight:500;">หมดสต็อก</span>`;
             let td = i.updatedAt ? `<div style="font-size: 11px; color: #8e8e93; margin-top: 5px;"><i class="fa-regular fa-clock"></i> อัปเดต: ${i.updatedAt}</div>` : '';
             
-            // ป้ายแสดงหมวดหมู่ (Tag)
             let catBadge = i.category ? `<span style="background: #3a3a3c; padding: 3px 8px; border-radius: 6px; font-size: 10px; color: #aeaeb2; margin-left: 8px;">${i.category}</span>` : '';
             
             list.innerHTML += `<div class="recent-item" style="align-items: flex-start; flex-direction: column; gap: 8px;"><div style="display: flex; justify-content: space-between; width: 100%; align-items: center;"><div style="display:flex; align-items:center;"><strong style="font-size: 15px; color: #4da6ff;">${n}</strong> ${catBadge}</div><div style="display: flex; align-items: center; gap: 15px;">${stat}<i class="fa-solid fa-trash" onclick="deleteCatalogItem(${idx})" style="color: #ff3b30; cursor: pointer; font-size: 16px; padding: 5px;"></i></div></div><div>${bt}${td}</div></div>`;
