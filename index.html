@@ -47,16 +47,13 @@
         #view-login { justify-content: center; align-items: center; padding: 30px; text-align: center; }
         .login-logo-img { width: 240px; height: auto; object-fit: contain; margin: 0 auto 20px auto; mix-blend-mode: screen !important; }
 
-        /* ปรับให้เล็กและประหยัดพื้นที่ขึ้น */
         .user-card { background-color: #2c2c2e; margin: 5px 20px 10px; padding: 10px 15px; border-radius: 12px; display: flex; gap: 15px; align-items: center; }
         .user-avatar { width: 40px; height: 40px; background-color: #3a3a3c; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
         
-        /* เปลี่ยนเป็น Grid 4 คอลัมน์ แถวเดียว */
         .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px 10px; padding: 10px 20px; text-align: center; font-size: 11px; color: #aeaeb2; }
         .action-grid > div { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: all 0.2s ease; }
         .action-grid > div:active { transform: scale(0.92); opacity: 0.8; }
         
-        /* ปรับปุ่มให้เล็กลง เพื่อเรียง 4 อันได้พอดี */
         .btn-circle { width: 48px; height: 48px; border-radius: 50%; border: none; color: white; font-size: 18px; display: flex; justify-content: center; align-items: center; cursor: pointer; margin-bottom: 8px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .btn-circle:hover { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 6px 15px rgba(0,0,0,0.3); }
         
@@ -64,7 +61,6 @@
         .recent-item { background: #2c2c2e; padding: 12px 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; transition: transform 0.2s ease, background 0.2s ease; }
         .recent-item:active { transform: scale(0.98); background: #3a3a3c; }
 
-        /* ป้ายกำกับแจ้งเตือนสีแดงและเหลือง */
         .badge-danger { background-color: rgba(255, 59, 48, 0.15); color: #ff3b30; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
         .badge-warning { background-color: rgba(255, 214, 10, 0.15); color: #ffd60a; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
 
@@ -86,7 +82,6 @@
         .cart-item-details p { font-size: 12px; color: #8e8e93; }
         .empty-state { text-align: center; color: #8e8e93; margin-top: 40px; font-size: 14px; }
 
-        /* แถบเมนูด้านล่าง */
         .bottom-nav { display: flex; justify-content: space-between; align-items: center; background-color: #1c1c1e; padding: 15px 20px calc(15px + env(safe-area-inset-bottom)); border-top: 1px solid #3a3a3c; position: absolute; bottom: 0; width: 100%; z-index: 10; }
         
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: #8e8e93; font-size: 10px; cursor: pointer; flex: 1; text-align: center; transition: all 0.2s ease; }
@@ -99,7 +94,6 @@
         .scan-fab i { font-size: 20px; }
         .nav-item.active .scan-fab { background-color: #007aff; transform: translateY(-3px); }
         
-        /* แก้ไขส่วนนี้ให้ป๊อปอัปปิดได้ตามปกติ ไม่ค้าง */
         div:where(.swal2-container) div:where(.swal2-popup) { border-radius: 20px !important; }
         div:where(.swal2-container) div:where(.swal2-popup.swal2-show) { animation: popIn 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
         @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
@@ -113,14 +107,99 @@
 
         i[onclick], div[onclick] > i.fa-chevron-left { transition: all 0.2s ease; cursor: pointer; }
         i[onclick]:active, div[onclick]:active > i.fa-chevron-left { transform: scale(0.75); opacity: 0.6; }
+
+        /* ==========================================
+           Cinematic Splash Screen CSS
+           ========================================== */
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #0b0b0b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .splash-content {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .splash-logo {
+            width: 80px;
+            height: auto;
+            margin-bottom: 20px;
+            opacity: 0;
+            mix-blend-mode: screen !important;
+            animation: cinematicLogo 4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .splash-title {
+            font-family: 'Prompt', sans-serif;
+            font-size: 32px;
+            font-weight: 500;
+            color: #fff;
+            margin-bottom: 12px;
+            opacity: 0;
+            animation: cinematicTitle 4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .splash-subtitle {
+            font-family: 'Prompt', sans-serif;
+            font-size: 13px;
+            color: #8e8e93;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeUpSubtitle 3.2s cubic-bezier(0.22, 1, 0.36, 1) 0.8s forwards;
+        }
+
+        @keyframes cinematicLogo {
+            0% { opacity: 0; filter: blur(10px); transform: scale(0.8); }
+            25% { opacity: 1; filter: blur(0px); transform: scale(1); }
+            75% { opacity: 1; filter: blur(0px); transform: scale(1.05); }
+            100% { opacity: 0; filter: blur(8px); transform: scale(1.15); }
+        }
+
+        @keyframes cinematicTitle {
+            0% { opacity: 0; filter: blur(12px); transform: scale(0.9) translateY(10px); letter-spacing: -2px; }
+            25% { opacity: 1; filter: blur(0px); transform: scale(1) translateY(0); letter-spacing: 0px; }
+            75% { opacity: 1; filter: blur(0px); transform: scale(1.03); letter-spacing: 1.5px; }
+            100% { opacity: 0; filter: blur(8px); transform: scale(1.15); letter-spacing: 3px; }
+        }
+
+        @keyframes fadeUpSubtitle {
+            0% { opacity: 0; transform: translateY(15px); filter: blur(5px); }
+            25% { opacity: 1; transform: translateY(0); filter: blur(0px); }
+            75% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-15px); filter: blur(8px); }
+        }
+
+        .splash-hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.15); 
+        }
     </style>
 </head>
 <body>
 
+<div id="splash-screen">
+    <div class="splash-content">
+        <img src="310110.jpg" alt="Logo" class="splash-logo" onerror="this.style.display='none'">
+        <h1 class="splash-title">วิศวกรรมที่มองไม่เห็น</h1>
+        <p class="splash-subtitle">นิยามใหม่ของความแข็งแกร่งและดีไซน์</p>
+    </div>
+</div>
+
 <div class="mobile-app">
     
     <div id="view-login" class="view active">
-        <img src="https://i.postimg.cc/zqt3tGKh/310110.jpg" alt="Logo" class="login-logo-img" onerror="this.style.display='none'">
+        <img src="310110.jpg" alt="Logo" class="login-logo-img" onerror="this.style.display='none'">
         <h2>STOCK FLOW</h2>
         <p style="color: #8e8e93; margin-bottom: 30px; font-size: 14px;">ระบบจัดการสต็อกและหน่วยงาน</p>
         
@@ -133,7 +212,7 @@
 
     <div id="view-home" class="view">
         <header class="app-header">
-            <div class="logo"><img src="https://i.postimg.cc/zqt3tGKh/310110.jpg" alt="Logo" class="header-logo-img" onerror="this.style.display='none'"> STOCK FLOW</div>
+            <div class="logo"><img src="310110.jpg" alt="Logo" class="header-logo-img" onerror="this.style.display='none'"> STOCK FLOW</div>
             <div><i class="fa-solid fa-bell"></i></div>
         </header>
         
@@ -155,7 +234,7 @@
                 <button class="btn-circle" style="background: #007aff;"><i class="fa-solid fa-box-open"></i></button>สต็อก
             </div>
             <div onclick="navigate('department')">
-                <button class="btn-circle" style="background: #ff9500;"><i class="fa-solid fa-sitemap"></i></button>แผนก
+                <button class="btn-circle" style="background: #ff9500;"><i class="fa-solid fa-sitemap"></i></button>หน่วยงาน
             </div>
         </div>
 
@@ -472,6 +551,16 @@
             navigate('login');
         }
         updateCartCount();
+
+        // ส่วนของ Splash Screen
+        setTimeout(() => {
+            const splash = document.getElementById('splash-screen');
+            if(splash) {
+                splash.classList.add('splash-hidden');
+                // ลบโค้ดทิ้งหลังจากจางหายไปแล้ว 800ms
+                setTimeout(() => splash.remove(), 800);
+            }
+        }, 3800);
     };
 
     function login() {
