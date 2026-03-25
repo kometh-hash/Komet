@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Stock App">
-    <title>Stock Flow - Pro Version</title>
+    <title>Stock Flow - Pro Version (Glassmorphism)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -25,7 +25,8 @@
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .view { display: none; flex-direction: column; height: 100%; overflow-y: auto; padding-bottom: 110px; background-color: #1c1c1e; }
+        /* แก้ไข padding-bottom เผื่อระยะเมนูที่ลอยขึ้นมา */
+        .view { display: none; flex-direction: column; height: 100%; overflow-y: auto; padding-bottom: 140px; background-color: #1c1c1e; }
         .view.active { display: flex; animation: fadeInSlide 0.35s ease cubic-bezier(0.25, 1, 0.5, 1) forwards; }
 
         .app-header { display: flex; justify-content: space-between; align-items: center; padding: calc(20px + env(safe-area-inset-top)) 20px 15px; background-color: #1c1c1e; }
@@ -70,15 +71,55 @@
         .cart-item-details p { font-size: 12px; color: #8e8e93; }
         .empty-state { text-align: center; color: #8e8e93; margin-top: 40px; font-size: 14px; }
 
-        .bottom-nav { display: flex; justify-content: space-between; align-items: center; background-color: #1c1c1e; padding: 15px 20px calc(15px + env(safe-area-inset-bottom)); border-top: 1px solid #3a3a3c; position: absolute; bottom: 0; width: 100%; z-index: 10; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: #8e8e93; font-size: 10px; cursor: pointer; flex: 1; text-align: center; transition: all 0.2s ease; }
+        /* ========================================= */
+        /* 🌟 Glassmorphism Bottom Navigation        */
+        /* ========================================= */
+        .bottom-nav { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: absolute; 
+            bottom: calc(20px + env(safe-area-inset-bottom)); 
+            left: 20px; 
+            right: 20px; 
+            width: auto; 
+            padding: 12px 20px; 
+            z-index: 10; 
+            background: rgba(255, 255, 255, 0.08); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px); 
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            border-radius: 30px; 
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4); 
+        }
+        .nav-item { 
+            display: flex; flex-direction: column; align-items: center; gap: 5px; 
+            color: #8e8e93; font-size: 10px; cursor: pointer; flex: 1; text-align: center; 
+            transition: all 0.2s ease; 
+        }
         .nav-item:active { transform: scale(0.9); opacity: 0.8; }
         .nav-item i { font-size: 18px; transition: color 0.3s ease; }
-        .nav-item.active { color: #007aff; }
+        .nav-item.active { color: #007aff; text-shadow: 0 0 10px rgba(0, 122, 255, 0.3); } 
         .nav-item.active i:not(.scan-fab i) { transform: translateY(-2px); }
-        .scan-fab { background-color: #3a3a3c; width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white !important; margin-top: -25px; border: 4px solid #1c1c1e; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .scan-fab i { font-size: 20px; }
-        .nav-item.active .scan-fab { background-color: #007aff; transform: translateY(-3px); }
+
+        .scan-fab { 
+            background-color: #3a3a3c; 
+            width: 55px; height: 55px; 
+            border-radius: 50%; 
+            display: flex; justify-content: center; align-items: center; 
+            color: white !important; 
+            margin-top: -35px; 
+            border: 4px solid #1c1c1e; 
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .nav-item.active .scan-fab { 
+            background: linear-gradient(135deg, #007aff, #4da6ff); 
+            border-color: #1c1c1e; 
+            transform: translateY(-5px) scale(1.05); 
+            box-shadow: 0 8px 20px rgba(0, 122, 255, 0.5); 
+        }
+
         div:where(.swal2-container) div:where(.swal2-popup) { border-radius: 20px !important; }
         div:where(.swal2-container) div:where(.swal2-popup.swal2-show) { animation: popIn 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
         @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
@@ -121,32 +162,26 @@
             margin-bottom: 12px;
             opacity: 0;
             
-            /* สร้างสี Gradient */
             background: linear-gradient(90deg, #a828f0, #ff7a00, #ff00c8, #00e1ff, #ff3b30, #a828f0);
             background-size: 200% auto;
             
-            /* ตัดสีพื้นหลังให้อยู่แค่ในตัวอักษร */
             color: transparent;
             -webkit-background-clip: text;
             background-clip: text;
             
-            /* เอฟเฟกต์เรืองแสง (Glow) */
             filter: drop-shadow(0px 0px 10px rgba(255, 255, 255, 0.15)) 
                     drop-shadow(0px 0px 25px rgba(255, 0, 200, 0.3));
 
-            /* เรียกใช้อนิเมชันเบลอ/ขยาย และ อนิเมชันสีไหล */
             animation: 
                 cinematicTitle 4s cubic-bezier(0.22, 1, 0.36, 1) forwards,
                 gradientFlow 3s linear infinite;
         }
 
-        /* อนิเมชันทำให้สี Gradient ไหลเคลื่อนที่ */
         @keyframes gradientFlow {
             0% { background-position: 0% 50%; }
             100% { background-position: 200% 50%; }
         }
 
-        /* อนิเมชันเข้า-ออกสไตล์ Apple */
         @keyframes cinematicTitle {
             0% { 
                 opacity: 0; 
@@ -192,19 +227,11 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const splashScreen = document.getElementById('splash-screen');
-            
-            // รอเวลา 3.8 วินาที (สอดคล้องกับระยะเวลา CSS Animation ด้านบน)
             setTimeout(() => {
-                splashScreen.classList.add('splash-hidden'); // เริ่มเฟดและซูมออก
-                
-                // รออีก 0.8 วินาที ให้เฟดออกเสร็จสมบูรณ์ ค่อยซ่อน Element ทิ้ง
+                splashScreen.classList.add('splash-hidden'); 
                 setTimeout(() => {
                     splashScreen.style.display = 'none';
-                    
-                    // ตัวอย่าง: ถ้ามีหน้า view-login รออยู่ สามารถเอาคอมเมนต์ออกเพื่อให้แสดงผลได้
-                    // document.getElementById('view-login').classList.add('active'); 
                 }, 800); 
-
             }, 3800); 
         });
     </script>
