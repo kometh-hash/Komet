@@ -21,7 +21,6 @@
         .mobile-app { width: 100%; max-width: 480px; height: 100%; background-color: #1c1c1e; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.8); display: flex; flex-direction: column; }
         @media (min-width: 500px) { .mobile-app { height: 90vh; max-height: 850px; border-radius: 30px; overflow: hidden; } }
 
-        /* แอนิเมชัน Fade-in เวลากดเปลี่ยนหน้า */
         @keyframes fadeInSlide {
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
@@ -33,8 +32,1245 @@
         .app-header { display: flex; justify-content: space-between; align-items: center; padding: calc(20px + env(safe-area-inset-top)) 20px 15px; background-color: #1c1c1e; }
         .logo { font-weight: 600; font-size: 14px; line-height: 1.2; display: flex; gap: 10px; align-items: center; }
         
-        /* แก้ไขโลโก้หน้า Header: เพิ่มสีขาวรองพื้นเผื่อภาพทึบ */
         .header-logo-img { height: 35px; width: auto; object-fit: contain; border-radius: 8px; background-color: #fff; padding: 2px; }
+
+        .text-blue { color: #4da6ff; } .text-red { color: #ff3b30; } .text-green { color: #34c759; } .text-yellow { color: #ffd60a; }
+        
+        .btn-primary { -webkit-appearance: none; appearance: none; background: #007aff; color: white; border: none; padding: 15px; border-radius: 12px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 15px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .btn-primary:active { transform: scale(0.96); filter: brightness(0.9); }
+        
+        .input-field { background: #2c2c2e; border: 1px solid #3a3a3c; color: white; padding: 15px; border-radius: 12px; width: 100%; margin-bottom: 15px; outline: none; font-size: 14px; transition: border-color 0.3s ease; }
+        .input-field:focus { border-color: #007aff; }
+        
+        select.input-field { appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%238e8e93%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 12px auto; }
+
+        #view-login { justify-content: center; align-items: center; padding: 30px; text-align: center; }
+        
+        .login-logo-img { width: 180px; height: auto; object-fit: contain; margin: 0 auto 20px auto; border-radius: 15px; background-color: #fff; padding: 5px; }
+
+        .user-card { background-color: #2c2c2e; margin: 5px 20px 10px; padding: 10px 15px; border-radius: 12px; display: flex; gap: 15px; align-items: center; }
+        .user-avatar { width: 40px; height: 40px; background-color: #3a3a3c; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
+        
+        .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px 10px; padding: 10px 20px; text-align: center; font-size: 11px; color: #aeaeb2; }
+        .action-grid > div { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: all 0.2s ease; }
+        .action-grid > div:active { transform: scale(0.92); opacity: 0.8; }
+        
+        .btn-circle { width: 48px; height: 48px; border-radius: 50%; border: none; color: white; font-size: 18px; display: flex; justify-content: center; align-items: center; cursor: pointer; margin-bottom: 8px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .btn-circle:hover { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 6px 15px rgba(0,0,0,0.3); }
+        
+        .recent-section { padding: 15px 20px; }
+        .recent-item { background: #2c2c2e; padding: 12px 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; transition: transform 0.2s ease, background 0.2s ease; }
+        .recent-item:active { transform: scale(0.98); background: #3a3a3c; }
+
+        .badge-danger { background-color: rgba(255, 59, 48, 0.15); color: #ff3b30; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+        .badge-warning { background-color: rgba(255, 214, 10, 0.15); color: #ffd60a; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+
+        .scan-area { flex: 1; display: flex; justify-content: center; align-items: center; flex-direction: column; background: #000; position: relative; }
+        .popup-card { background: #2c2c2e; padding: 20px calc(20px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-bottom)); border-radius: 15px 15px 0 0; position: absolute; bottom: 0; width: 100%; display: none; z-index: 20; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); animation: slideUp 0.3s ease forwards; }
+        
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .qty-control { display: flex; align-items: center; gap: 15px; margin: 15px 0; }
+        .qty-btn { background: #3a3a3c; border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; transition: all 0.2s ease; }
+        .qty-btn:active { transform: scale(0.8); background: #8e8e93; }
+
+        .cart-list { padding: 20px; }
+        .cart-item { background: #2c2c2e; padding: 15px; border-radius: 12px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s ease; }
+        .cart-item-details h4 { font-size: 14px; margin-bottom: 5px; }
+        .cart-item-details p { font-size: 12px; color: #8e8e93; }
+        .empty-state { text-align: center; color: #8e8e93; margin-top: 40px; font-size: 14px; }
+
+        .bottom-nav { display: flex; justify-content: space-between; align-items: center; background-color: #1c1c1e; padding: 15px 20px calc(15px + env(safe-area-inset-bottom)); border-top: 1px solid #3a3a3c; position: absolute; bottom: 0; width: 100%; z-index: 10; }
+        
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: #8e8e93; font-size: 10px; cursor: pointer; flex: 1; text-align: center; transition: all 0.2s ease; }
+        .nav-item:active { transform: scale(0.9); opacity: 0.8; }
+        .nav-item i { font-size: 18px; transition: color 0.3s ease; }
+        .nav-item.active { color: #007aff; }
+        .nav-item.active i:not(.scan-fab i) { transform: translateY(-2px); }
+        
+        .scan-fab { background-color: #3a3a3c; width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white !important; margin-top: -25px; border: 4px solid #1c1c1e; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .scan-fab i { font-size: 20px; }
+        .nav-item.active .scan-fab { background-color: #007aff; transform: translateY(-3px); }
+        
+        div:where(.swal2-container) div:where(.swal2-popup) { border-radius: 20px !important; }
+        div:where(.swal2-container) div:where(.swal2-popup.swal2-show) { animation: popIn 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
+        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+        .signature-box { background: #fff; border-radius: 12px; width: 100%; height: 160px; touch-action: none; border: 2px solid #3a3a3c; cursor: crosshair; transition: border-color 0.3s ease; display: block; }
+        .signature-box:active { border-color: #007aff; }
+        
+        .action-btns { display: flex; gap: 8px; }
+        .sm-btn { border: none; color: white; width: 35px; height: 35px; border-radius: 8px; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 14px; transition: all 0.2s ease; }
+        .sm-btn:active { transform: scale(0.8); filter: brightness(0.8); }
+
+        i[onclick], div[onclick] > i.fa-chevron-left { transition: all 0.2s ease; cursor: pointer; }
+        i[onclick]:active, div[onclick]:active > i.fa-chevron-left { transform: scale(0.75); opacity: 0.6; }
+
+        /* Cinematic Splash Screen CSS */
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #0b0b0b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .splash-content {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .splash-logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 20px;
+            opacity: 0;
+            border-radius: 15px;
+            background-color: #fff;
+            padding: 5px;
+            animation: cinematicLogo 4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .splash-title {
+            font-family: 'Prompt', sans-serif;
+            font-size: 32px;
+            font-weight: 500;
+            color: #fff;
+            margin-bottom: 12px;
+            opacity: 0;
+            animation: cinematicTitle 4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .splash-subtitle {
+            font-family: 'Prompt', sans-serif;
+            font-size: 13px;
+            color: #8e8e93;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeUpSubtitle 3.2s cubic-bezier(0.22, 1, 0.36, 1) 0.8s forwards;
+        }
+
+        @keyframes cinematicLogo {
+            0% { opacity: 0; filter: blur(10px); transform: scale(0.8); }
+            25% { opacity: 1; filter: blur(0px); transform: scale(1); }
+            75% { opacity: 1; filter: blur(0px); transform: scale(1.05); }
+            100% { opacity: 0; filter: blur(8px); transform: scale(1.15); }
+        }
+
+        @keyframes cinematicTitle {
+            0% { opacity: 0; filter: blur(12px); transform: scale(0.9) translateY(10px); letter-spacing: -2px; }
+            25% { opacity: 1; filter: blur(0px); transform: scale(1) translateY(0); letter-spacing: 0px; }
+            75% { opacity: 1; filter: blur(0px); transform: scale(1.03); letter-spacing: 1.5px; }
+            100% { opacity: 0; filter: blur(8px); transform: scale(1.15); letter-spacing: 3px; }
+        }
+
+        @keyframes fadeUpSubtitle {
+            0% { opacity: 0; transform: translateY(15px); filter: blur(5px); }
+            25% { opacity: 1; transform: translateY(0); filter: blur(0px); }
+            75% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-15px); filter: blur(8px); }
+        }
+
+        .splash-hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.15); 
+        }
+    </style>
+</head>
+<body>
+
+<div id="splash-screen">
+    <div class="splash-content">
+        <img src="312097.jpg" alt="Logo" class="splash-logo">
+        <h1 class="splash-title">วิศวกรรมที่มองไม่เห็น</h1>
+        <p class="splash-subtitle">นิยามใหม่ของความแข็งแกร่งและดีไซน์</p>
+    </div>
+</div>
+
+<div class="mobile-app">
+    
+    <div id="view-login" class="view active">
+        <img src="312097.jpg" alt="Logo" class="login-logo-img">
+        <h2>STOCK FLOW</h2>
+        <p style="color: #8e8e93; margin-bottom: 30px; font-size: 14px;">ระบบจัดการสต็อกและหน่วยงาน</p>
+        
+        <div style="width: 100%; max-width: 320px; margin: 0 auto; text-align: left;">
+            <input type="text" id="username" class="input-field" placeholder="ชื่อผู้ใช้งาน (ผู้บันทึก)">
+            <input type="password" class="input-field" placeholder="รหัส PIN 4 หลัก">
+            <button class="btn-primary" onclick="login()">เข้าสู่ระบบ</button>
+        </div>
+    </div>
+
+    <div id="view-home" class="view">
+        <header class="app-header">
+            <div class="logo"><img src="312097.jpg" alt="Logo" class="header-logo-img"> STOCK FLOW</div>
+            <div><i class="fa-solid fa-bell"></i></div>
+        </header>
+        
+        <div class="user-card">
+            <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+            <div>
+                <h3 id="display-name" style="font-size: 14px;">ผู้รับผิดชอบ: -</h3>
+            </div>
+        </div>
+        
+        <div class="action-grid">
+            <div onclick="navigate('scan')">
+                <button class="btn-circle" style="background: #ff3b30;"><i class="fa-solid fa-cart-arrow-down"></i></button>สแกนเบิก
+            </div>
+            <div onclick="navigate('receive')">
+                <button class="btn-circle" style="background: #34c759;"><i class="fa-solid fa-download"></i></button>รับเข้า
+            </div>
+            <div onclick="navigate('catalog')">
+                <button class="btn-circle" style="background: #007aff;"><i class="fa-solid fa-box-open"></i></button>สต็อก
+            </div>
+            <div onclick="navigate('department')">
+                <button class="btn-circle" style="background: #ff9500;"><i class="fa-solid fa-sitemap"></i></button>หน่วยงาน
+            </div>
+        </div>
+
+        <div class="recent-section">
+            <h3 style="font-size: 14px; margin-bottom: 10px;">แจ้งเตือนคลังหลัก</h3>
+            <div id="dashboard-summary"></div>
+        </div>
+    </div>
+
+    <div id="view-receive" class="view">
+        <header class="app-header">
+            <div onclick="navigate('home')" style="cursor: pointer;"><i class="fa-solid fa-chevron-left"></i> กลับ</div>
+            <div>รับเข้าสต็อก (แก้ไข)</div>
+            <div></div>
+        </header>
+        <div style="padding: 20px;">
+            <label style="font-size: 12px; color: #aeaeb2; margin-bottom: 5px; display: block;">รหัสบาร์โค้ด (สแกนหรือพิมพ์)</label>
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <input type="text" id="receive-barcode" class="input-field" placeholder="ตัวเลขบาร์โค้ด..." oninput="checkExistingItem()" style="margin-bottom: 0; flex: 1;">
+                <button class="btn-primary" style="background: #007aff; margin-top: 0; width: 55px; padding: 0; display: flex; justify-content: center; align-items: center;" onclick="toggleReceiveScanner()">
+                    <i class="fa-solid fa-barcode"></i>
+                </button>
+            </div>
+            <div id="receive-scanner-container" style="display: none; width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 15px; background: #000; text-align: center;">
+                <div id="reader-receive" style="width: 100%;"></div>
+                <button class="btn-primary" style="background: #ff3b30; margin: 10px auto; width: 90%; padding: 10px;" onclick="toggleReceiveScanner()">
+                    <i class="fa-solid fa-xmark"></i> ยกเลิกการสแกน
+                </button>
+            </div>
+            <label style="font-size: 12px; color: #aeaeb2; margin-bottom: 5px; display: block;">ชื่อสินค้า</label>
+            <input type="text" id="receive-name" class="input-field" placeholder="เช่น น็อตตัวผู้, ซิลิโคน..." oninput="checkExistingItem()">
+            
+            <label style="font-size: 12px; color: #aeaeb2; margin-bottom: 5px; display: block;">หมวดหมู่</label>
+            <input type="text" id="receive-category" class="input-field" placeholder="เช่น เครื่องมือช่าง, อุปกรณ์ไฟฟ้า...">
+
+            <div id="existing-item-info" style="color: #ffd60a; font-size: 13px; margin-bottom: 15px; display: none; background: rgba(255,214,10,0.1); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,214,10,0.3); line-height: 1.5;"></div>
+            <div style="display: flex; gap: 10px;">
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #aeaeb2; margin-bottom: 5px; display: block;">จำนวนที่รับเข้า</label>
+                    <input type="number" id="receive-qty" class="input-field" placeholder="0" min="1">
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; color: #aeaeb2; margin-bottom: 5px; display: block;">หน่วยนับ</label>
+                    <select id="receive-unit" class="input-field">
+                        <option value="ชิ้น">ชิ้น</option>
+                        <option value="ดอก">ดอก</option>
+                        <option value="กล่อง">กล่อง</option>
+                        <option value="ลัง">ลัง</option>
+                        <option value="หลอด">หลอด</option>
+                        <option value="ตัว">ตัว</option>
+                        <option value="กระป๋อง">กระป๋อง</option>
+                        <option value="ม้วน">ม้วน</option>
+                        <option value="ใบ">ใบ</option>
+                        <option value="อัน">อัน</option>
+                        <option value="กระบอก">กระบอก</option>
+                    </select>
+                </div>
+            </div>
+            <button id="btn-save-new" class="btn-primary" style="background: #34c759; margin-top: 20px;" onclick="processStock('new')"><i class="fa-solid fa-check"></i> บันทึกรายการใหม่</button>
+            
+            <div id="btn-group-edit" style="display: none; gap: 10px; margin-top: 15px;">
+                <button class="btn-primary" style="background: #34c759; flex: 1; padding: 12px; font-size: 14px; margin-top: 0;" onclick="processStock('add')"><i class="fa-solid fa-plus"></i> เพิ่ม</button>
+                <button class="btn-primary" style="background: #ff3b30; flex: 1; padding: 12px; font-size: 14px; margin-top: 0;" onclick="processStock('reduce')"><i class="fa-solid fa-minus"></i> ลด</button>
+                <button class="btn-primary" style="background: #007aff; flex: 1; padding: 12px; font-size: 14px; margin-top: 0;" onclick="processStock('edit')"><i class="fa-solid fa-pen"></i> แก้ไข</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-scan" class="view">
+        <header class="app-header">
+            <div onclick="navigate('home')"><i class="fa-solid fa-chevron-left"></i> กลับ</div>
+            <div>สแกนเบิกของ (เข้าตะกร้า)</div>
+            <div></div>
+        </header>
+        <div class="scan-area">
+            <div id="reader" style="width: 100%; max-width: 375px; border-radius: 15px; overflow: hidden; background: #000;"></div>
+            <p style="color: #8e8e93; margin-top: 20px; text-align: center;">นำบาร์โค้ดมาไว้ในกรอบเพื่อสแกน</p>
+            <div id="scan-popup" class="popup-card">
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #3a3a3c; padding-bottom: 10px;">
+                    <div>
+                        <h3 id="scan-item-name" style="font-size: 16px; color: #4da6ff; margin-bottom: 3px; word-break: break-all;">-</h3>
+                        <p id="scan-item-sku" style="font-size: 12px; color: #8e8e93;">-</p>
+                    </div>
+                    <i class="fa-solid fa-xmark" onclick="closePopup()" style="cursor: pointer; font-size: 20px; color: #8e8e93;"></i>
+                </div>
+                <div class="qty-control">
+                    <button class="qty-btn" onclick="updateQty(-1)">-</button>
+                    <span id="scan-qty" style="font-size: 18px; width: 30px; text-align: center;">1</span>
+                    <button class="qty-btn" onclick="updateQty(1)">+</button>
+                    <span id="scan-unit" style="font-size: 14px; color: #aeaeb2;">ชิ้น</span>
+                </div>
+                <button class="btn-primary" onclick="addToCart()">ใส่ตะกร้า</button>
+                <input type="hidden" id="scan-hidden-barcode" value="">
+            </div>
+        </div>
+    </div>
+
+    <div id="view-cart" class="view">
+        <header class="app-header" style="flex-shrink: 0;">
+            <div onclick="navigate('home')" style="cursor: pointer;"><i class="fa-solid fa-chevron-left"></i> กลับ</div>
+            <div>สรุปรายการเบิกของ</div>
+            <i class="fa-solid fa-trash" onclick="clearCart()" style="color: #ff3b30; cursor: pointer;"></i>
+        </header>
+        <div class="cart-list" id="cart-container" style="flex-shrink: 0; padding-bottom: 0;"></div>
+        
+        <div id="checkout-section" style="padding: 20px; display: none; flex-shrink: 0; margin-bottom: 30px;">
+            <div style="background: #2c2c2e; padding: 20px; border-radius: 15px; margin-bottom: 15px;">
+                <label style="font-size: 13px; color: #aeaeb2; margin-bottom: 8px; display: block;">ชื่อผู้รับของ / ผู้เบิกสินค้า</label>
+                <input type="text" id="picker-name" class="input-field" placeholder="ระบุชื่อผู้ที่มารับของ..." style="margin-bottom: 15px;">
+                
+                <label style="font-size: 13px; color: #aeaeb2; margin-bottom: 8px; display: block;">หน่วยงาน</label>
+                <input type="text" id="picker-department" class="input-field" placeholder="ระบุหน่วยงาน..." style="margin-bottom: 15px;">
+
+                <label style="font-size: 13px; color: #aeaeb2; margin-bottom: 8px; display: block;"><i class="fa-solid fa-pen-nib"></i> ลายเซ็นผู้รับของ (ใช้นิ้วเขียน)</label>
+                
+                <canvas id="signature-pad" class="signature-box" style="width: 100%; height: 160px; touch-action: none; display: block;"></canvas>
+                
+                <div style="text-align: right; margin-top: 10px;">
+                    <span onclick="clearSignature()" style="color: #ff3b30; font-size: 13px; cursor: pointer; transition: opacity 0.2s; padding: 5px;"><i class="fa-solid fa-eraser"></i> ล้างลายเซ็น</span>
+                </div>
+            </div>
+            
+            <button class="btn-primary" onclick="confirmOrder()" style="background: #34c759; margin-bottom: 50px;"><i class="fa-solid fa-check"></i> ยืนยันการเบิกสินค้า</button>
+        </div>
+    </div>
+
+    <div id="view-catalog" class="view">
+        <header class="app-header">
+            <div onclick="navigate('home')" style="cursor: pointer;"><i class="fa-solid fa-chevron-left"></i> กลับ</div>
+            <div>แคตตาล็อกสินค้า (คลังหลัก)</div>
+            <i class="fa-solid fa-trash-can" onclick="clearCatalog()" style="cursor: pointer; color: #ff3b30;" title="ล้างสต็อกทั้งหมด"></i>
+        </header>
+        <div style="padding: 20px;">
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <input type="text" id="catalog-search" class="input-field" placeholder="ค้นหาชื่อ, หมวดหมู่ หรือ สแกน..." oninput="renderCatalog()" style="margin-bottom: 0; flex: 1;">
+                <button class="btn-primary" style="background: #007aff; margin-top: 0; width: 55px; padding: 0; display: flex; justify-content: center; align-items: center;" onclick="toggleCatalogScanner()">
+                    <i class="fa-solid fa-barcode"></i>
+                </button>
+            </div>
+            <div id="catalog-scanner-container" style="display: none; width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 15px; background: #000; text-align: center;">
+                <div id="reader-catalog" style="width: 100%;"></div>
+                <button class="btn-primary" style="background: #ff3b30; margin: 10px auto; width: 90%; padding: 10px;" onclick="toggleCatalogScanner()">
+                    <i class="fa-solid fa-xmark"></i> ยกเลิกการสแกน
+                </button>
+            </div>
+            <div id="catalog-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+        </div>
+    </div>
+
+    <div id="view-department" class="view">
+        <header class="app-header">
+            <div onclick="navigate('home')" style="cursor: pointer;"><i class="fa-solid fa-chevron-left"></i> กลับ</div>
+            <div>จัดการหน่วยงาน</div>
+            <div></div>
+        </header>
+        <div style="padding: 20px;">
+            <div style="display: flex; gap: 10px; margin-bottom: 25px;">
+                <input type="text" id="new-dept-name" class="input-field" placeholder="เพิ่มชื่อหน่วยงานใหม่..." style="margin-bottom: 0; flex: 1;">
+                <button class="btn-primary" style="background: #34c759; margin-top: 0; width: 60px; padding: 0; display: flex; justify-content: center; align-items: center;" onclick="addDepartment()">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </div>
+
+            <p style="color: #8e8e93; font-size: 14px; margin-bottom: 15px;">รายชื่อหน่วยงานในระบบ</p>
+            <div id="department-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+        </div>
+    </div>
+
+    <div id="view-department-detail" class="view">
+        <header class="app-header">
+            <div onclick="navigate('department')" style="cursor: pointer;"><i class="fa-solid fa-chevron-left"></i> กลับ</div>
+            <div id="dept-detail-title" style="color: #ff9500;">ชื่อแผนก</div>
+            <div></div>
+        </header>
+        <div style="padding: 20px;">
+            <div style="background: #2c2c2e; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                <label style="font-size: 12px; color: #aeaeb2; margin-bottom: 8px; display: block;"><i class="fa-solid fa-toolbox"></i> เพิ่ม/เบิก อุปกรณ์ประจำแผนกนี้</label>
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <input type="text" id="new-dept-item-name" class="input-field" placeholder="สแกน หรือ พิมพ์ชื่ออุปกรณ์..." style="margin-bottom: 0; flex: 1;">
+                    <button class="btn-primary" style="background: #007aff; margin-top: 0; width: 55px; padding: 0; display: flex; justify-content: center; align-items: center;" onclick="toggleDeptScanner()">
+                        <i class="fa-solid fa-barcode"></i>
+                    </button>
+                </div>
+
+                <div id="dept-scanner-container" style="display: none; width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 10px; background: #000; text-align: center;">
+                    <div id="reader-dept" style="width: 100%;"></div>
+                    <button class="btn-primary" style="background: #ff3b30; margin: 10px auto; width: 90%; padding: 10px;" onclick="toggleDeptScanner()">
+                        <i class="fa-solid fa-xmark"></i> ยกเลิกการสแกน
+                    </button>
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <input type="number" id="new-dept-item-qty" class="input-field" placeholder="ระบุจำนวน" min="1" style="flex: 1; margin-bottom: 0;">
+                    <button class="btn-primary" style="background: #ff9500; margin-top: 0; width: 60px; padding: 0; display: flex; justify-content: center; align-items: center;" onclick="quickWithdrawDepartmentItem()" title="เบิกออก">
+                        <i class="fa-solid fa-minus"></i>
+                    </button>
+                    <button class="btn-primary" style="background: #34c759; margin-top: 0; width: 60px; padding: 0; display: flex; justify-content: center; align-items: center;" onclick="addDepartmentItem()" title="เพิ่มเข้า">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <p style="color: #8e8e93; font-size: 14px; margin-bottom: 15px;">รายการอุปกรณ์ทั้งหมด</p>
+            <div id="dept-item-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+        </div>
+    </div>
+
+    <div id="view-menu" class="view">
+        <header class="app-header">
+            <div></div>
+            <div>ตั้งค่าและเมนู</div>
+            <div></div>
+        </header>
+        <div style="padding: 20px;">
+            <div class="user-card" style="margin: 0 0 20px 0;">
+                <div class="user-avatar" style="width: 60px; height: 60px; font-size: 24px;"><i class="fa-solid fa-user"></i></div>
+                <div>
+                    <h2 id="profile-name-menu" style="font-size: 18px; margin-bottom: 2px;">-</h2>
+                    <p style="color: #8e8e93; font-size: 12px;">ผู้รับผิดชอบระบบ</p>
+                </div>
+            </div>
+
+            <div style="background: #2c2c2e; border-radius: 15px; overflow: hidden; margin-bottom: 15px;">
+                <div onclick="syncDatabaseFromCloud()" style="padding: 15px 20px; border-bottom: 1px solid #3a3a3c; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: background 0.2s ease;">
+                    <div><i class="fa-solid fa-cloud-arrow-down" style="color: #34c759; width: 25px;"></i> ซิงค์อุปกรณ์ (จากคลังหลัก)</div>
+                </div>
+            </div>
+
+            <div style="background: #2c2c2e; border-radius: 15px; overflow: hidden;">
+                <div onclick="navigate('history')" style="padding: 15px 20px; border-bottom: 1px solid #3a3a3c; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: background 0.2s ease;">
+                    <div><i class="fa-solid fa-clock-rotate-left" style="color: #007aff; width: 25px;"></i> ดูประวัติการทำรายการ</div>
+                    <i class="fa-solid fa-chevron-right" style="color: #8e8e93;"></i>
+                </div>
+                <div onclick="logout()" style="padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: background 0.2s ease;">
+                    <div style="color: #ff3b30;"><i class="fa-solid fa-right-from-bracket" style="width: 25px;"></i> ออกจากระบบ</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-history" class="view">
+        <header class="app-header">
+            <div onclick="navigate('menu')" style="cursor: pointer;"><i class="fa-solid fa-chevron-left"></i> กลับ</div>
+            <div>ประวัติการทำรายการ</div>
+            <i class="fa-solid fa-trash-can" onclick="clearHistory()" style="color: #ff3b30; cursor: pointer;"></i>
+        </header>
+        <div style="padding: 20px;">
+            <div style="display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #3a3a3c; padding-bottom: 15px;">
+                <button class="btn-primary" style="margin-top: 0; flex: 1; padding: 10px; font-size: 13px;" onclick="renderHistory('main')">คลังหลัก</button>
+                <button class="btn-primary" style="margin-top: 0; flex: 1; padding: 10px; font-size: 13px; background: #ff9500;" onclick="renderHistory('dept')">ภายในแผนก</button>
+            </div>
+            <h4 id="history-title" style="margin-bottom: 15px; color: #aeaeb2; font-size: 14px;">แสดงประวัติ: คลังหลัก</h4>
+            <div id="history-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+        </div>
+    </div>
+
+    <nav id="bottom-nav" class="bottom-nav" style="display: none;"> 
+        <div class="nav-item nav-btn" data-target="home" onclick="navigate('home')"> 
+            <i class="fa-solid fa-house"></i><span>หน้าแรก</span> 
+        </div> 
+        <div class="nav-item nav-btn" data-target="catalog" onclick="navigate('catalog')"> 
+            <i class="fa-solid fa-box-open"></i><span>สต็อก</span> 
+        </div> 
+        <div class="nav-item active nav-btn" data-target="scan" onclick="navigate('scan')"> 
+            <div class="scan-fab"><i class="fa-solid fa-qrcode"></i></div> <span>สแกน</span> 
+        </div> 
+        <div class="nav-item nav-btn" data-target="cart" onclick="navigate('cart')"> 
+            <i class="fa-solid fa-cart-shopping"></i><span id="cart-count">ตะกร้า</span> 
+        </div> 
+        <div class="nav-item nav-btn" data-target="menu" onclick="navigate('menu')"> 
+            <i class="fa-solid fa-bars"></i><span>เมนู</span> 
+        </div> 
+    </nav>
+</div>
+
+<script>
+    // ==========================================
+    // 1. สคริปต์แก้ปัญหา UI บนมือถือ
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', () => {
+        const inputs = document.querySelectorAll('input, select, textarea');
+        const bottomNav = document.getElementById('bottom-nav');
+        
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                if(bottomNav) bottomNav.style.display = 'none';
+            });
+            input.addEventListener('blur', () => {
+                setTimeout(() => {
+                    const activeView = document.querySelector('.view.active');
+                    if(activeView) {
+                        const viewId = activeView.id;
+                        if(viewId !== 'view-login' && 
+                           viewId !== 'view-receive' && 
+                           viewId !== 'view-history' && 
+                           viewId !== 'view-department-detail') {
+                            if(bottomNav) bottomNav.style.display = 'flex';
+                        }
+                    }
+                }, 100);
+            });
+        });
+    });
+
+    // ==========================================
+    // 2. JavaScript จัดการสต็อกและการเบิก
+    // ==========================================
+    
+    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbysI3_JLKryvf5ebJTn2U9P1HoihG3RTH2esa8HlF84lcBONB5arQIFznaIOB0ImGFF/exec";
+    const GOOGLE_SHEET_DEPT_URL = ""; 
+
+    let currentQty = 1;
+    let cart = JSON.parse(localStorage.getItem('stockFlowCart')) || []; 
+    let stockCatalog = JSON.parse(localStorage.getItem('stockFlowCatalog')) || []; 
+    let orderHistory = JSON.parse(localStorage.getItem('stockFlowHistory')) || []; 
+    let deptHistory = JSON.parse(localStorage.getItem('stockFlowDeptHistory')) || []; 
+    let currentUser = localStorage.getItem('stockFlowUser') || '';
+    
+    let departmentsList = JSON.parse(localStorage.getItem('stockFlowDepartments')) || [];
+    let departmentItems = JSON.parse(localStorage.getItem('stockFlowDeptItems')) || {}; 
+    let selectedDeptForDetail = ''; 
+
+    let html5QrCode, html5QrCodeReceive, html5QrCodeCatalog, html5QrCodeDept;
+    let isReceiveScannerOpen = false, isCatalogScannerOpen = false, isDeptScannerOpen = false;
+
+    let canvas, ctx;
+    let isDrawing = false;
+    let hasSignature = false;
+
+    function triggerFeedback() {
+        if (navigator.vibrate) navigator.vibrate(200); 
+    }
+
+    const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 2000, timerProgressBar: true, background: '#2c2c2e', color: '#fff' });
+
+    window.onload = function() {
+        if(currentUser) {
+            document.getElementById('display-name').innerText = 'ผู้รับผิดชอบ: ' + currentUser;
+            document.getElementById('profile-name-menu').innerText = currentUser; 
+            navigate('home');
+        } else {
+            navigate('login');
+        }
+        updateCartCount();
+
+        setTimeout(() => {
+            const splash = document.getElementById('splash-screen');
+            if(splash) {
+                splash.classList.add('splash-hidden');
+                setTimeout(() => splash.remove(), 800);
+            }
+        }, 3800);
+    };
+
+    function login() {
+        const username = document.getElementById('username').value.trim();
+        if(!username) { Swal.fire({icon: 'warning', title: 'เดี๋ยวก่อน!', text: 'กรุณาใส่ชื่อผู้ใช้งาน (ผู้บันทึก)', background: '#2c2c2e', color: '#fff', confirmButtonColor: '#007aff'}); return; }
+        currentUser = username;
+        localStorage.setItem('stockFlowUser', currentUser); 
+        document.getElementById('display-name').innerText = 'ผู้รับผิดชอบ: ' + currentUser;
+        document.getElementById('profile-name-menu').innerText = currentUser;
+        navigate('home');
+    }
+
+    function logout() {
+        Swal.fire({
+            title: 'ออกจากระบบ', text: 'ต้องการออกจากระบบ?', icon: 'question', showCancelButton: true, confirmButtonColor: '#ff3b30', cancelButtonColor: '#3a3a3c', background: '#2c2c2e', color: '#fff'
+        }).then((result) => {
+            if (result.isConfirmed) { currentUser = ''; localStorage.removeItem('stockFlowUser'); document.getElementById('username').value = ''; navigate('login'); }
+        });
+    }
+
+    function navigate(viewId) {
+        document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById('view-' + viewId).classList.add('active');
+        
+        const bottomNav = document.getElementById('bottom-nav');
+        if(viewId === 'login' || viewId === 'receive' || viewId === 'history' || viewId === 'department-detail') { 
+            bottomNav.style.display = 'none'; 
+        } else { 
+            bottomNav.style.display = 'flex'; 
+            const activeBtn = document.querySelector(`.nav-btn[data-target="${viewId}"]`); 
+            if(activeBtn) activeBtn.classList.add('active'); 
+        }
+
+        if(viewId === 'cart') { renderCart(); } 
+        if(viewId === 'catalog') { document.getElementById('catalog-search').value = ''; renderCatalog(); }
+        if(viewId === 'department') renderDepartments();
+        if(viewId === 'home') renderHome();
+        if(viewId === 'history') renderHistory('main');
+        if(viewId === 'receive') { 
+            document.getElementById('receive-barcode').value = ''; 
+            document.getElementById('receive-name').value = ''; 
+            document.getElementById('receive-category').value = ''; 
+            document.getElementById('receive-qty').value = ''; 
+            document.getElementById('receive-unit').value = 'ชิ้น'; 
+            checkExistingItem(); 
+        }
+        
+        if(viewId === 'scan') startRealScanner();
+        else { stopRealScanner(); document.getElementById('scan-popup').style.display = 'none'; }
+        
+        if(viewId !== 'receive' && isReceiveScannerOpen) toggleReceiveScanner();
+        if(viewId !== 'catalog' && isCatalogScannerOpen) toggleCatalogScanner();
+        if(viewId !== 'department-detail' && isDeptScannerOpen) toggleDeptScanner();
+    }
+
+    function sendDeptToSheet(actionType, deptName, itemName, itemQty, byUser) {
+        if(!GOOGLE_SHEET_DEPT_URL || GOOGLE_SHEET_DEPT_URL === "") return;
+        
+        fetch(GOOGLE_SHEET_DEPT_URL, {
+            redirect: "follow", method: 'POST', mode: 'no-cors', headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: actionType, department: deptName, item: itemName, qty: itemQty, user: byUser })
+        }).catch(e => console.error("Error:", e));
+    }
+
+    function renderDepartments() {
+        const list = document.getElementById('department-list');
+        if(!list) return;
+        list.innerHTML = '';
+        if(departmentsList.length === 0) { list.innerHTML = '<div class="empty-state">ยังไม่มีหน่วยงานในระบบ (เพิ่มใหม่ด้านบน)</div>'; return; }
+        departmentsList.forEach((dept, index) => {
+            let itemCount = departmentItems[dept] ? departmentItems[dept].length : 0;
+            list.innerHTML += `<div class="recent-item" style="display: flex; justify-content: space-between; align-items: center;"><div style="display: flex; align-items: center; gap: 15px; cursor: pointer; flex: 1;" onclick="viewDepartmentDetail('${dept}')"><div style="width: 45px; height: 45px; background: #3a3a3c; border-radius: 12px; display: flex; justify-content: center; align-items: center; color: #ff9500; font-size: 18px;"><i class="fa-solid fa-users-gear"></i></div><div><strong style="font-size: 15px; color: #fff;">${dept}</strong><p style="font-size: 11px; color: #8e8e93;">มีอุปกรณ์ ${itemCount} รายการ</p></div></div><div style="display: flex; align-items: center;"><i class="fa-solid fa-chevron-right" style="color: #8e8e93; font-size: 12px; margin-right: 15px; cursor:pointer;" onclick="viewDepartmentDetail('${dept}')"></i><i class="fa-solid fa-trash" onclick="deleteDepartment(${index})" style="color: #ff3b30; cursor: pointer; padding: 10px; font-size: 16px;"></i></div></div>`;
+        });
+    }
+
+    function addDepartment() {
+        const input = document.getElementById('new-dept-name'); const newDept = input.value.trim();
+        if(!newDept) return; if(departmentsList.includes(newDept)) return;
+        departmentsList.push(newDept); localStorage.setItem('stockFlowDepartments', JSON.stringify(departmentsList)); input.value = ''; renderDepartments(); Toast.fire({ icon: 'success', title: 'เพิ่มหน่วยงานสำเร็จ' });
+    }
+
+    function deleteDepartment(index) {
+        Swal.fire({ title: 'ยืนยันการลบ', text: `ต้องการลบหน่วยงานนี้พร้อมอุปกรณ์ทั้งหมดใช่หรือไม่?`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#ff3b30', background: '#2c2c2e', color: '#fff' }).then((result) => {
+            if (result.isConfirmed) { const deptName = departmentsList[index]; delete departmentItems[deptName]; localStorage.setItem('stockFlowDeptItems', JSON.stringify(departmentItems)); departmentsList.splice(index, 1); localStorage.setItem('stockFlowDepartments', JSON.stringify(departmentsList)); renderDepartments(); }
+        });
+    }
+
+    function toggleDeptScanner() {
+        const container = document.getElementById('dept-scanner-container');
+        if (isDeptScannerOpen) { if (html5QrCodeDept && html5QrCodeDept.isScanning) { html5QrCodeDept.stop().then(() => { container.style.display = 'none'; isDeptScannerOpen = false; }); } else { container.style.display = 'none'; isDeptScannerOpen = false; } } 
+        else { container.style.display = 'block'; if (!html5QrCodeDept) html5QrCodeDept = new Html5Qrcode("reader-dept"); html5QrCodeDept.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 150 } }, (decodedText) => { triggerFeedback(); document.getElementById('new-dept-item-name').value = decodedText; toggleDeptScanner(); }).catch(err => {}); isDeptScannerOpen = true; }
+    }
+
+    function viewDepartmentDetail(dept) { selectedDeptForDetail = dept; document.getElementById('dept-detail-title').innerText = dept; renderDepartmentItems(); navigate('department-detail'); }
+
+    function renderDepartmentItems() {
+        const list = document.getElementById('dept-item-list'); list.innerHTML = ''; const items = departmentItems[selectedDeptForDetail] || [];
+        if(items.length === 0) { list.innerHTML = '<div class="empty-state">แผนกนี้ยังไม่มีการลงทะเบียนอุปกรณ์</div>'; return; }
+        
+        items.forEach((item, index) => {
+            let timeDisplay = item.updatedAt ? `<p style="font-size: 11px; color: #8e8e93; margin-top: 3px;"><i class="fa-regular fa-clock"></i> อัปเดต: ${item.updatedAt}</p>` : '';
+            list.innerHTML += `
+            <div class="recent-item" style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="width: 40px; height: 40px; background: #3a3a3c; border-radius: 10px; display: flex; justify-content: center; align-items: center; color: #4da6ff;"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                    <div><strong style="font-size: 14px; color: #fff;">${item.name}</strong><p style="font-size: 12px; color: #8e8e93;">จำนวน: <span style="color: #ffd60a;">${item.qty}</span></p>${timeDisplay}</div>
+                </div>
+                <div class="action-btns">
+                    <button class="sm-btn" style="background: #ff9500;" onclick="withdrawDepartmentItem(${index})" title="เบิกออก"><i class="fa-solid fa-minus"></i></button>
+                    <button class="sm-btn" style="background: #ff3b30;" onclick="deleteDepartmentItem(${index})" title="ลบออก"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>`;
+        });
+    }
+
+    function addDepartmentItem() {
+        const nameInput = document.getElementById('new-dept-item-name').value.trim(); const qtyInput = parseInt(document.getElementById('new-dept-item-qty').value);
+        if(!nameInput || isNaN(qtyInput) || qtyInput <= 0) { Swal.fire({icon: 'warning', title: 'ระบุข้อมูลให้ครบ', background: '#2c2c2e', color: '#fff'}); return; }
+        if(!departmentItems[selectedDeptForDetail]) departmentItems[selectedDeptForDetail] = [];
+        
+        const now = new Date().toLocaleString('th-TH');
+        const existingItem = departmentItems[selectedDeptForDetail].find(i => i.name === nameInput);
+        if(existingItem) { existingItem.qty += qtyInput; existingItem.updatedAt = now; } else { departmentItems[selectedDeptForDetail].push({ name: nameInput, qty: qtyInput, updatedAt: now }); }
+        
+        localStorage.setItem('stockFlowDeptItems', JSON.stringify(departmentItems)); 
+        document.getElementById('new-dept-item-name').value = ''; document.getElementById('new-dept-item-qty').value = ''; renderDepartmentItems();
+        
+        // เพิ่มคำว่า action: 'เพิ่มเข้า'
+        const rec = { date: now, user: currentUser, dept: selectedDeptForDetail, action: 'เพิ่มเข้า', items: `- ${nameInput} (x${qtyInput})` };
+        deptHistory.unshift(rec); if (deptHistory.length > 30) deptHistory.pop(); localStorage.setItem('stockFlowDeptHistory', JSON.stringify(deptHistory));
+
+        sendDeptToSheet('เพิ่มอุปกรณ์เข้า', selectedDeptForDetail, nameInput, qtyInput, currentUser);
+        Toast.fire({ icon: 'success', title: 'เพิ่มลงแผนกเรียบร้อย' });
+    }
+    
+    function quickWithdrawDepartmentItem() {
+        const nameInput = document.getElementById('new-dept-item-name').value.trim();
+        const qtyInput = parseInt(document.getElementById('new-dept-item-qty').value);
+
+        if(!nameInput || isNaN(qtyInput) || qtyInput <= 0) { Swal.fire({icon: 'warning', title: 'ระบุข้อมูล/จำนวนเบิกให้ครบ', background: '#2c2c2e', color: '#fff'}); return; }
+        if(!departmentItems[selectedDeptForDetail]) departmentItems[selectedDeptForDetail] = [];
+        const existingItem = departmentItems[selectedDeptForDetail].find(i => i.name === nameInput);
+        
+        if(!existingItem) { Swal.fire({icon: 'error', title: 'ไม่พบอุปกรณ์ในแผนก', text: `ไม่มี "${nameInput}"`, background: '#2c2c2e', color: '#fff'}); return; }
+        if(existingItem.qty < qtyInput) { Swal.fire({icon: 'error', title: 'อุปกรณ์ไม่พอ!', background: '#2c2c2e', color: '#fff'}); return; }
+
+        const now = new Date().toLocaleString('th-TH');
+        existingItem.qty -= qtyInput; existingItem.updatedAt = now;
+        localStorage.setItem('stockFlowDeptItems', JSON.stringify(departmentItems));
+        document.getElementById('new-dept-item-name').value = ''; document.getElementById('new-dept-item-qty').value = ''; renderDepartmentItems();
+
+        // เพิ่มคำว่า action: 'เบิกออก'
+        const rec = { date: now, user: currentUser, dept: selectedDeptForDetail, action: 'เบิกออก', items: `- ${nameInput} (x${qtyInput})` };
+        deptHistory.unshift(rec); if (deptHistory.length > 30) deptHistory.pop(); localStorage.setItem('stockFlowDeptHistory', JSON.stringify(deptHistory));
+
+        sendDeptToSheet('เบิกออก', selectedDeptForDetail, nameInput, qtyInput, currentUser);
+        Toast.fire({ icon: 'success', title: 'เบิกอุปกรณ์สำเร็จ' });
+    }
+
+    function withdrawDepartmentItem(index) {
+        const item = departmentItems[selectedDeptForDetail][index];
+        Swal.fire({
+            title: 'เบิกใช้งาน', html: `ต้องการเบิก <b>${item.name}</b><br><small style="color: #aeaeb2;">(มีอยู่ทั้งหมด: ${item.qty})</small>`,
+            input: 'number', inputAttributes: { min: 1, max: item.qty, step: 1 }, inputValue: 1,
+            showCancelButton: true, confirmButtonText: 'ยืนยันเบิก', cancelButtonText: 'ยกเลิก', confirmButtonColor: '#ff9500', cancelButtonColor: '#3a3a3c', background: '#2c2c2e', color: '#fff'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const withdrawQty = parseInt(result.value);
+                if (isNaN(withdrawQty) || withdrawQty <= 0 || withdrawQty > item.qty) { Swal.fire({icon: 'error', title: 'จำนวนไม่ถูกต้อง', background: '#2c2c2e', color: '#fff'}); return; }
+
+                const now = new Date().toLocaleString('th-TH');
+                item.qty -= withdrawQty; item.updatedAt = now;
+                localStorage.setItem('stockFlowDeptItems', JSON.stringify(departmentItems)); renderDepartmentItems();
+
+                // เพิ่มคำว่า action: 'เบิกออก'
+                const rec = { date: now, user: currentUser, dept: selectedDeptForDetail, action: 'เบิกออก', items: `- ${item.name} (x${withdrawQty})` };
+                deptHistory.unshift(rec); if (deptHistory.length > 30) deptHistory.pop(); localStorage.setItem('stockFlowDeptHistory', JSON.stringify(deptHistory));
+
+                sendDeptToSheet('เบิกออก', selectedDeptForDetail, item.name, withdrawQty, currentUser);
+                Toast.fire({ icon: 'success', title: `เบิกอุปกรณ์สำเร็จ` });
+            }
+        });
+    }
+
+    function deleteDepartmentItem(index) { 
+        Swal.fire({ title: 'ยืนยันการลบ', text: `ต้องการลบอุปกรณ์นี้ออกจากแผนกใช่หรือไม่?`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#ff3b30', background: '#2c2c2e', color: '#fff' }).then((result) => {
+            if (result.isConfirmed) { departmentItems[selectedDeptForDetail].splice(index, 1); localStorage.setItem('stockFlowDeptItems', JSON.stringify(departmentItems)); renderDepartmentItems(); Toast.fire({ icon: 'success', title: 'ลบสำเร็จ' }); }
+        });
+    }
+
+    function syncDatabaseFromCloud() {
+        Swal.fire({
+            title: 'อัปเดตข้อมูล', text: 'ต้องการให้ "จำนวนสินค้า" อัปเดตตาม Google Sheet ด้วยหรือไม่?', icon: 'question',
+            showDenyButton: true, showCancelButton: true, confirmButtonText: 'อัปเดตยอดด้วย', denyButtonText: 'อัปเดตแค่ชื่อ (รักษายอดมือถือ)', cancelButtonText: 'ยกเลิก',
+            confirmButtonColor: '#34c759', denyButtonColor: '#007aff', cancelButtonColor: '#3a3a3c', background: '#2c2c2e', color: '#fff'
+        }).then((result) => {
+            if (result.isConfirmed || result.isDenied) {
+                let updateQuantity = result.isConfirmed; 
+
+                Swal.fire({ title: 'กำลังดึงข้อมูลคลังหลัก...', background: '#2c2c2e', color: '#fff', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
+                
+                fetch(GOOGLE_SHEET_URL + "?t=" + new Date().getTime(), { redirect: "follow" })
+                .then(r => r.json())
+                .then(data => {
+                    let added = 0, updated = 0; const now = new Date().toLocaleString('th-TH');
+                    
+                    data.forEach(dbItem => {
+                        let existing = stockCatalog.find(i => (dbItem.barcode && i.barcode === dbItem.barcode) || (dbItem.name && i.name === dbItem.name));
+                        if(existing) { 
+                            existing.name = dbItem.name || existing.name; 
+                            existing.barcode = dbItem.barcode || existing.barcode; 
+                            if(dbItem.category) existing.category = dbItem.category; 
+                            if(updateQuantity) existing.qty = dbItem.qty !== undefined ? parseInt(dbItem.qty) : existing.qty;
+                            existing.updatedAt = now; 
+                            updated++; 
+                        } 
+                        else { 
+                            stockCatalog.push({ 
+                                barcode: dbItem.barcode, name: dbItem.name, category: dbItem.category || '', 
+                                qty: dbItem.qty !== undefined ? parseInt(dbItem.qty) : 0, unit: dbItem.unit || 'ชิ้น', updatedAt: now 
+                            }); 
+                            added++; 
+                        }
+                    });
+                    
+                    localStorage.setItem('stockFlowCatalog', JSON.stringify(stockCatalog)); 
+                    if(document.getElementById('view-catalog').classList.contains('active')) renderCatalog(); 
+                    if(document.getElementById('view-home').classList.contains('active')) renderHome();
+                    
+                    Swal.fire({ icon: 'success', title: 'ซิงค์สำเร็จ!', text: `เพิ่ม ${added} รายการ, อัปเดต ${updated} รายการ`, background: '#2c2c2e', color: '#fff', confirmButtonColor: '#007aff' });
+                })
+                .catch(err => { 
+                    Swal.fire({icon: 'error', title: 'ผิดพลาด', text: 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้', background: '#2c2c2e', color: '#fff', confirmButtonColor: '#007aff'}); 
+                });
+            }
+        });
+    }
+
+    function sendToGoogleSheet(actionType, itemName, itemQty, pickerName = "-", dept = "-", category = "-") {
+        if(!GOOGLE_SHEET_URL || GOOGLE_SHEET_URL === "") return;
+        fetch(GOOGLE_SHEET_URL, { 
+            redirect: "follow", 
+            method: 'POST', 
+            mode: 'no-cors', 
+            headers: { "Content-Type": "text/plain;charset=utf-8" }, 
+            body: JSON.stringify({ 
+                user: currentUser, 
+                picker: pickerName, 
+                dept: dept, 
+                action: actionType, 
+                item: itemName, 
+                qty: itemQty, 
+                category: category 
+            }) 
+        }).catch(e => console.error(e));
+    }
+
+    function checkExistingItem() {
+        const b = document.getElementById('receive-barcode').value.trim(); const n = document.getElementById('receive-name').value.trim();
+        let exist = stockCatalog.find(i => (b && (i.barcode === b || i.name === b)) || (n && (i.name === n || i.barcode === n)));
+        const infoBox = document.getElementById('existing-item-info'); const btnNew = document.getElementById('btn-save-new'); const btnEdit = document.getElementById('btn-group-edit');
+        if (exist) {
+            if(exist.name && exist.name !== b && !n) document.getElementById('receive-name').value = exist.name;
+            if(exist.barcode && !b) document.getElementById('receive-barcode').value = exist.barcode;
+            if(exist.category) document.getElementById('receive-category').value = exist.category; else document.getElementById('receive-category').value = '';
+            
+            infoBox.style.display = 'block'; infoBox.innerHTML = `<b>พบสินค้าเดิมในระบบ:</b><br>มียอดคงเหลือ <b>${exist.qty} ${exist.unit || 'ชิ้น'}</b>`;
+            document.getElementById('receive-unit').value = exist.unit || 'ชิ้น'; btnNew.style.display = 'none'; btnEdit.style.display = 'flex'; 
+        } else { 
+            infoBox.style.display = 'none'; btnNew.style.display = 'block'; btnEdit.style.display = 'none'; 
+            if(!document.getElementById('receive-category').value) document.getElementById('receive-category').value = '';
+        }
+    }
+
+    function processStock(action) {
+        const b = document.getElementById('receive-barcode').value.trim(); 
+        const n = document.getElementById('receive-name').value.trim(); 
+        const c = document.getElementById('receive-category').value.trim(); 
+        const q = parseInt(document.getElementById('receive-qty').value); 
+        const u = document.getElementById('receive-unit').value;
+        
+        if(!n && !b) return Swal.fire({icon: 'warning', title: 'ข้อมูลไม่ครบ', text: 'กรุณากรอกข้อมูล', background: '#2c2c2e', color: '#fff'});
+        if(isNaN(q) || q < 0) return Swal.fire({icon: 'warning', title: 'ระบุจำนวนให้ถูกต้อง', background: '#2c2c2e', color: '#fff'});
+        let exist = stockCatalog.find(i => (b && (i.barcode === b || i.name === b)) || (n && (i.name === n || i.barcode === n)));
+        const now = new Date().toLocaleString('th-TH'); let logAction = '';
+        
+        if (action === 'new') { 
+            stockCatalog.push({ barcode: b, name: (n||b), category: c, qty: q, unit: u, updatedAt: now }); 
+            logAction = 'รับเข้า (ของใหม่)'; 
+        } 
+        else if (action === 'add') { 
+            exist.qty += q; exist.category = c; exist.updatedAt = now; logAction = 'เพิ่มสต็อก'; 
+        } 
+        else if (action === 'reduce') { 
+            if (exist.qty < q) return Swal.fire({icon:'error', title:'สต็อกไม่พอ', background:'#2c2c2e', color:'#fff'}); 
+            exist.qty -= q; exist.category = c; exist.updatedAt = now; logAction = 'ลดสต็อก (แก้ไข)'; 
+        } 
+        else if (action === 'edit') { 
+            exist.qty = q; exist.category = c; exist.updatedAt = now; logAction = 'แก้ไขยอดสุทธิ'; 
+        }
+        
+        let dName = exist ? (exist.barcode && exist.name !== exist.barcode ? `[${exist.barcode}] ${exist.name}` : exist.name) : (n||b);
+        localStorage.setItem('stockFlowCatalog', JSON.stringify(stockCatalog)); 
+        
+        sendToGoogleSheet(logAction, dName, q + ' ' + u, "-", "-", c); 
+        
+        document.getElementById('receive-barcode').value = ''; 
+        document.getElementById('receive-name').value = ''; 
+        document.getElementById('receive-category').value = ''; 
+        document.getElementById('receive-qty').value = ''; 
+        checkExistingItem(); navigate('home'); Toast.fire({ icon: 'success', title: 'บันทึกสต็อกสำเร็จ' });
+    }
+
+    function renderHome() {
+        const summary = document.getElementById('dashboard-summary');
+        if(stockCatalog.length === 0) { 
+            summary.innerHTML = '<div class="empty-state">ยังไม่มีข้อมูลสินค้า<br>กด "รับเข้า" เพื่อเริ่มใช้งาน</div>'; 
+            return; 
+        }
+        
+        summary.innerHTML = `<div class="recent-item" style="border-left: 4px solid #007aff;">รายการสินค้าคลังหลัก <b>${stockCatalog.length} รายการ</b></div>`;
+        
+        stockCatalog.forEach(item => {
+            let u = item.unit || 'ชิ้น'; let n = item.name || item.barcode;
+            
+            if(item.qty > 0 && item.qty <= 5) { 
+                summary.innerHTML += `<div class="recent-item" style="border-left: 4px solid #ffd60a; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 65%;">${n}</span> 
+                    <span class="badge-warning">เหลือ ${item.qty} ${u}</span>
+                </div>`; 
+            } 
+            else if(item.qty <= 0) { 
+                summary.innerHTML += `<div class="recent-item" style="border-left: 4px solid #ff3b30; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 65%;">${n}</span> 
+                    <span class="badge-danger">หมดสต็อก!</span>
+                </div>`; 
+            }
+        });
+    }
+
+    function renderCatalog() {
+        const list = document.getElementById('catalog-list'); const s = document.getElementById('catalog-search') ? document.getElementById('catalog-search').value.toLowerCase() : '';
+        list.innerHTML = ''; let fc = stockCatalog;
+        
+        if(s) fc = stockCatalog.filter(i => (i.name && i.name.toLowerCase().includes(s)) || (i.barcode && i.barcode.toLowerCase().includes(s)) || (i.category && i.category.toLowerCase().includes(s)));
+        if(fc.length === 0) { list.innerHTML = '<div class="empty-state">ไม่พบสินค้า</div>'; return; }
+        
+        fc.forEach((i) => {
+            let idx = stockCatalog.indexOf(i); let u = i.unit || 'ชิ้น'; let n = i.name || i.barcode || 'ไม่มีชื่อสินค้า';
+            let bt = (i.barcode && i.barcode !== i.name) ? `<span style="color:#8e8e93; font-size:11px;"><i class="fa-solid fa-barcode"></i> ${i.barcode}</span>` : '';
+            let stat = i.qty > 0 ? `<span class="text-green" style="font-size:14px; font-weight:500;">เหลือ ${i.qty} ${u}</span>` : `<span class="text-red" style="font-size:14px; font-weight:500;">หมดสต็อก</span>`;
+            let td = i.updatedAt ? `<div style="font-size: 11px; color: #8e8e93; margin-top: 5px;"><i class="fa-regular fa-clock"></i> อัปเดต: ${i.updatedAt}</div>` : '';
+            let catBadge = i.category ? `<span style="background: #3a3a3c; padding: 3px 8px; border-radius: 6px; font-size: 10px; color: #aeaeb2; margin-left: 8px;">${i.category}</span>` : '';
+            
+            list.innerHTML += `<div class="recent-item" style="align-items: flex-start; flex-direction: column; gap: 8px;"><div style="display: flex; justify-content: space-between; width: 100%; align-items: center;"><div style="display:flex; align-items:center;"><strong style="font-size: 15px; color: #4da6ff;">${n}</strong> ${catBadge}</div><div style="display: flex; align-items: center; gap: 15px;">${stat}<i class="fa-solid fa-trash" onclick="deleteCatalogItem(${idx})" style="color: #ff3b30; cursor: pointer; font-size: 16px; padding: 5px;"></i></div></div><div>${bt}${td}</div></div>`;
+        });
+    }
+
+    function deleteCatalogItem(index) { Swal.fire({ title: 'ยืนยันการลบ', icon: 'warning', showCancelButton: true, confirmButtonColor: '#ff3b30', background: '#2c2c2e', color: '#fff' }).then((r) => { if (r.isConfirmed) { stockCatalog.splice(index, 1); localStorage.setItem('stockFlowCatalog', JSON.stringify(stockCatalog)); renderCatalog(); Toast.fire({ icon: 'success', title: 'ลบสำเร็จ' }); } }); }
+    function clearCatalog() { Swal.fire({ title: 'อันตราย!', text: "ล้างคลังสินค้าทั้งหมด?", icon: 'warning', showCancelButton: true, confirmButtonColor: '#ff3b30', background: '#2c2c2e', color: '#fff' }).then((r) => { if (r.isConfirmed) { stockCatalog = []; localStorage.removeItem('stockFlowCatalog'); renderCatalog(); } }); }
+
+    let currentHistoryView = 'main';
+    function renderHistory(type) {
+        currentHistoryView = type;
+        const list = document.getElementById('history-list'); if(!list) return; list.innerHTML = '';
+        const title = document.getElementById('history-title');
+        
+        let dataToRender = [];
+        if(type === 'main') { title.innerText = "แสดงประวัติ: เบิกคลังหลัก"; dataToRender = orderHistory; } 
+        else { title.innerText = "แสดงประวัติ: เบิกใช้งานในแผนก"; dataToRender = deptHistory; }
+        
+        if(dataToRender.length === 0) { list.innerHTML = '<div class="empty-state">ยังไม่มีประวัติ</div>'; return; }
+        
+        dataToRender.forEach(r => {
+            let detailHtml = '';
+            if(type === 'main') {
+                let sigHtml = r.signature ? `<div><span style="font-size: 12px; color: #8e8e93;">ลายเซ็น:</span><br><img src="${r.signature}" style="background: #fff; width: 120px; border-radius: 8px; margin-top: 5px;"></div>` : '';
+                let deptTxt = r.dept && r.dept !== "-" ? ` <span style="color:#ff9500;">(${r.dept})</span>` : '';
+                detailHtml = `<b>ผู้รับของ:</b> ${r.picker || r.user}${deptTxt}<br><b>รายการ:</b><br>${r.items}<br>${sigHtml}`;
+            } else {
+                // เพิ่มการแสดงผล Action (เพิ่มเข้า/เบิกออก) แบบ Badge สวยๆ
+                let actBadge = '';
+                if(r.action === 'เพิ่มเข้า') {
+                    actBadge = `<span style="background: rgba(52, 199, 89, 0.15); color: #34c759; padding: 3px 8px; border-radius: 6px; font-size: 11px; margin-left: 8px;"><i class="fa-solid fa-arrow-down"></i> เพิ่มเข้า</span>`;
+                } else if(r.action === 'เบิกออก') {
+                    actBadge = `<span style="background: rgba(255, 149, 0, 0.15); color: #ff9500; padding: 3px 8px; border-radius: 6px; font-size: 11px; margin-left: 8px;"><i class="fa-solid fa-arrow-up"></i> เบิกออก</span>`;
+                }
+                
+                detailHtml = `<b>แผนก:</b> <span style="color:#ff9500;">${r.dept}</span> ${actBadge}<br><b>บันทึกโดย:</b> ${r.user}<br><b>รายการ:</b><br>${r.items}`;
+            }
+
+            list.innerHTML += `<div style="background: #2c2c2e; border-radius: 12px; padding: 15px;"><div style="display: flex; justify-content: space-between; border-bottom: 1px solid #3a3a3c; padding-bottom: 10px; margin-bottom: 10px;"><span style="font-size: 12px; color: #8e8e93;"><i class="fa-regular fa-calendar"></i> ${r.date}</span><span style="font-size: 12px; color: #34c759;"><i class="fa-solid fa-check-circle"></i> สำเร็จ</span></div><div style="font-size: 14px; line-height: 1.5;">${detailHtml}</div></div>`;
+        });
+    }
+
+    function clearHistory() {
+        Swal.fire({ title: 'ล้างประวัติ', text: "ต้องการล้างประวัติหน้านี้ทั้งหมดหรือไม่?", icon: 'warning', showCancelButton: true, confirmButtonColor: '#ff3b30', background: '#2c2c2e', color: '#fff' }).then((r) => { 
+            if (r.isConfirmed) { 
+                if(currentHistoryView === 'main') { orderHistory = []; localStorage.removeItem('stockFlowHistory'); } 
+                else { deptHistory = []; localStorage.removeItem('stockFlowDeptHistory'); }
+                renderHistory(currentHistoryView); 
+            } 
+        });
+    }
+
+    function startRealScanner() {
+        document.getElementById('scan-popup').style.display = 'none'; if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
+        html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 150 } }, onScanSuccess).catch(e => {});
+    }
+    function stopRealScanner() { if (html5QrCode && html5QrCode.isScanning) html5QrCode.stop().catch(()=>{}); }
+    
+    function toggleReceiveScanner() {
+        const c = document.getElementById('receive-scanner-container');
+        if (isReceiveScannerOpen) { if (html5QrCodeReceive && html5QrCodeReceive.isScanning) html5QrCodeReceive.stop().then(() => { c.style.display = 'none'; isReceiveScannerOpen = false; }); else { c.style.display = 'none'; isReceiveScannerOpen = false; } } 
+        else { c.style.display = 'block'; if (!html5QrCodeReceive) html5QrCodeReceive = new Html5Qrcode("reader-receive"); html5QrCodeReceive.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 150 } }, (txt) => { triggerFeedback(); document.getElementById('receive-barcode').value = txt; toggleReceiveScanner(); checkExistingItem(); }).catch(e => {}); isReceiveScannerOpen = true; }
+    }
+
+    function toggleCatalogScanner() {
+        const c = document.getElementById('catalog-scanner-container');
+        if (isCatalogScannerOpen) { 
+            if (html5QrCodeCatalog && html5QrCodeCatalog.isScanning) {
+                html5QrCodeCatalog.stop().then(() => { c.style.display = 'none'; isCatalogScannerOpen = false; }); 
+            } else { 
+                c.style.display = 'none'; isCatalogScannerOpen = false; 
+            } 
+        } 
+        else { 
+            c.style.display = 'block'; 
+            if (!html5QrCodeCatalog) html5QrCodeCatalog = new Html5Qrcode("reader-catalog"); 
+            html5QrCodeCatalog.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 150 } }, (txt) => { 
+                triggerFeedback(); 
+                document.getElementById('catalog-search').value = txt; 
+                toggleCatalogScanner(); 
+                renderCatalog(); 
+            }).catch(e => {}); 
+            isCatalogScannerOpen = true; 
+        }
+    }
+
+    // ==========================================
+    // 3. ส่วนระบบเบิกตะกร้า และสแกนบาร์โค้ด
+    // ==========================================
+
+    function onScanSuccess(decodedText) {
+        triggerFeedback();
+        let item = stockCatalog.find(i => i.barcode === decodedText || i.name === decodedText);
+        let itemName = decodedText;
+        let itemSku = "รหัส: " + decodedText;
+        let unit = "ชิ้น";
+        
+        if (item) {
+            itemName = item.name;
+            if(item.barcode && item.barcode !== item.name) itemSku = "รหัส: " + item.barcode; else itemSku = "รหัส: " + item.name;
+            if(item.unit) unit = item.unit;
+        }
+
+        document.getElementById('scan-item-name').innerText = itemName;
+        document.getElementById('scan-item-sku').innerText = itemSku;
+        document.getElementById('scan-unit').innerText = unit;
+        document.getElementById('scan-hidden-barcode').value = decodedText;
+        currentQty = 1;
+        document.getElementById('scan-qty').innerText = currentQty;
+        
+        document.getElementById('scan-popup').style.display = 'block';
+    }
+
+    function closePopup() {
+        document.getElementById('scan-popup').style.display = 'none';
+        if (html5QrCode && !html5QrCode.isScanning && document.getElementById('view-scan').classList.contains('active')) {
+            startRealScanner();
+        }
+    }
+
+    function updateQty(change) {
+        currentQty += change;
+        if(currentQty < 1) currentQty = 1;
+        document.getElementById('scan-qty').innerText = currentQty;
+        triggerFeedback();
+    }
+
+    function addToCart() {
+        const barcode = document.getElementById('scan-hidden-barcode').value;
+        const name = document.getElementById('scan-item-name').innerText;
+        const unit = document.getElementById('scan-unit').innerText;
+        
+        let existingItem = cart.find(i => i.barcode === barcode);
+        if (existingItem) {
+            existingItem.qty += currentQty;
+        } else {
+            cart.push({ barcode: barcode, name: name, qty: currentQty, unit: unit });
+        }
+        
+        localStorage.setItem('stockFlowCart', JSON.stringify(cart));
+        Toast.fire({ icon: 'success', title: 'ใส่ตะกร้าแล้ว' });
+        
+        updateCartCount();
+        closePopup();
+    }
+
+    function updateCartCount() {
+        const count = cart.length;
+        const badge = document.getElementById('cart-count');
+        if(count > 0) {
+            badge.innerText = "ตะกร้า (" + count + ")";
+            badge.style.color = "#ff3b30";
+        } else {
+            badge.innerText = "ตะกร้า";
+            badge.style.color = "inherit";
+        }
+    }
+
+    function renderCart() {
+        const container = document.getElementById('cart-container');
+        const checkoutSec = document.getElementById('checkout-section');
+        container.innerHTML = '';
+        
+        if (cart.length === 0) {
+            container.innerHTML = '<div class="empty-state">ไม่มีสินค้าในตะกร้า</div>';
+            checkoutSec.style.display = 'none';
+            return;
+        }
+        
+        cart.forEach((item, index) => {
+            container.innerHTML += `
+            <div class="cart-item">
+                <div class="cart-item-details">
+                    <h4 style="color:#4da6ff;">${item.name}</h4>
+                    <p>รหัส: ${item.barcode}</p>
+                </div>
+                <div style="display:flex; align-items:center; gap: 15px;">
+                    <span style="font-size:16px; font-weight:bold; color:#fff;">${item.qty} <span style="font-size:12px; font-weight:normal; color:#8e8e93;">${item.unit}</span></span>
+                    <i class="fa-solid fa-trash" onclick="removeFromCart(${index})" style="color: #ff3b30; cursor: pointer; padding: 5px;"></i>
+                </div>
+            </div>`;
+        });
+        checkoutSec.style.display = 'block';
+        setTimeout(initSignaturePad, 100);
+    }
+
+    function removeFromCart(index) {
+        cart.splice(index, 1);
+        localStorage.setItem('stockFlowCart', JSON.stringify(cart));
+        renderCart();
+        updateCartCount();
+    }
+
+    function clearCart() {
+        if(cart.length === 0) return;
+        Swal.fire({
+            title: 'ล้างตะกร้า', text: 'ลบรายการทั้งหมด?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#ff3b30', background: '#2c2c2e', color: '#fff'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                cart = [];
+                localStorage.removeItem('stockFlowCart');
+                renderCart();
+                updateCartCount();
+            }
+        });
+    }
+
+    // ==========================================
+    // 4. ส่วนลายเซ็นและบันทึกข้อมูลเบิก
+    // ==========================================
+
+    function initSignaturePad() {
+        if (!canvas) {
+            canvas = document.getElementById('signature-pad');
+            ctx = canvas.getContext('2d');
+            
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#000';
+
+            const getPos = (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const touch = e.touches ? e.touches[0] : e;
+                return { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
+            };
+
+            const startDraw = (e) => {
+                isDrawing = true; hasSignature = true;
+                const pos = getPos(e);
+                ctx.beginPath(); ctx.moveTo(pos.x, pos.y);
+                e.preventDefault();
+            };
+
+            const draw = (e) => {
+                if (!isDrawing) return;
+                const pos = getPos(e);
+                ctx.lineTo(pos.x, pos.y); ctx.stroke();
+                e.preventDefault();
+            };
+
+            const stopDraw = () => { isDrawing = false; };
+
+            canvas.addEventListener('mousedown', startDraw); canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDraw); canvas.addEventListener('mouseout', stopDraw);
+            canvas.addEventListener('touchstart', startDraw, {passive: false});
+            canvas.addEventListener('touchmove', draw, {passive: false});
+            canvas.addEventListener('touchend', stopDraw);
+        }
+    }
+
+    function clearSignature() {
+        if(ctx && canvas) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hasSignature = false;
+        }
+    }
+
+    function confirmOrder() {
+        const p = document.getElementById('picker-name').value.trim();
+        const dept = document.getElementById('picker-department').value.trim();
+        
+        if(!p || !dept) { Swal.fire({ icon: 'warning', title: 'ข้อมูลไม่ครบ', text: 'กรุณาระบุชื่อผู้รับของ และหน่วยงาน', background: '#2c2c2e', color: '#fff' }); return; }
+        if(!hasSignature) { Swal.fire({ icon: 'warning', title: 'ยังไม่ได้เซ็นชื่อ', text: 'กรุณาให้ผู้รับของเซ็นชื่อ', background: '#2c2c2e', color: '#fff' }); return; }
+
+        Swal.fire({ title: 'กำลังบันทึก...', background: '#2c2c2e', color: '#fff', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
+
+        const now = new Date().toLocaleString('th-TH');
+        let txtItems = '';
+        const sig = canvas.toDataURL();
+
+        cart.forEach(cItem => {
+            let dName = (cItem.barcode !== cItem.name) ? `[${cItem.barcode}] ${cItem.name}` : cItem.name;
+            txtItems += `- ${dName} (x${cItem.qty})<br>`;
+            
+            let sItem = stockCatalog.find(i => i.barcode === cItem.barcode || i.name === cItem.barcode);
+            let cat = (sItem && sItem.category) ? sItem.category : "-";
+
+            if(sItem) { 
+                sItem.qty -= cItem.qty; 
+                if(sItem.qty < 0) sItem.qty = 0; 
+                sItem.updatedAt = now; 
+            }
+            sendToGoogleSheet('เบิกออกคลังหลัก', dName, cItem.qty + ' ' + (cItem.unit || 'ชิ้น'), p, dept, cat);
+        });
+
+        localStorage.setItem('stockFlowCatalog', JSON.stringify(stockCatalog));
+        
+        const rec = { date: now, user: currentUser, picker: p, dept: dept, items: txtItems, signature: sig };
+        orderHistory.unshift(rec); 
+        if (orderHistory.length > 30) orderHistory.pop(); 
+        localStorage.setItem('stockFlowHistory', JSON.stringify(orderHistory));
+        
+        Swal.fire({ icon: 'success', title: 'บันทึกสำเร็จ!', background: '#2c2c2e', color: '#fff' });
+        
+        cart = []; 
+        localStorage.removeItem('stockFlowCart'); 
+        document.getElementById('picker-name').value = ''; 
+        document.getElementById('picker-department').value = ''; 
+        clearSignature(); 
+        navigate('home'); 
+        updateCartCount();
+    }
+
+    // ==========================================
+    // 5. รองรับ Scanner คีย์บอร์ดแบบ USB / Bluetooth
+    // ==========================================
+    document.addEventListener('keypress', function(e) {
+        if(document.getElementById('view-scan').classList.contains('active') && document.getElementById('scan-popup').style.display === 'none') {
+            if(e.key === 'Enter') { 
+                const c = window.globalBarcodeBuffer || ''; 
+                if(c) { 
+                    onScanSuccess(c); 
+                    window.globalBarcodeBuffer = ''; 
+                } 
+            } else { 
+                window.globalBarcodeBuffer = (window.globalBarcodeBuffer || '') + e.key; 
+                clearTimeout(window.barcodeTimeout); 
+                window.barcodeTimeout = setTimeout(() => { window.globalBarcodeBuffer = ''; }, 500);
+            }
+        }
+    });
+</script>
+</body>
+</html>        .header-logo-img { height: 35px; width: auto; object-fit: contain; border-radius: 8px; background-color: #fff; padding: 2px; }
 
         .text-blue { color: #4da6ff; } .text-red { color: #ff3b30; } .text-green { color: #34c759; } .text-yellow { color: #ffd60a; }
         
