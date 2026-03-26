@@ -524,7 +524,7 @@
         <div style="padding: 20px;">
             <div style="display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #3a3a3c; padding-bottom: 15px;">
                 <button class="btn-primary" style="margin-top: 0; flex: 1; padding: 10px; font-size: 13px;" onclick="renderHistory('main')">คลังหลัก</button>
-                <button class="btn-primary" style="margin-top: 0; flex: 1; padding: 10px; font-size: 13px; background: #ff9500;" onclick="renderHistory('dept')">หน่วยงานภายนอก</button>
+                <button class="btn-primary" style="margin-top: 0; flex: 1; padding: 10px; font-size: 13px; background: #ff9500;" onclick="renderHistory('dept')">ภายในแผนก</button>
             </div>
             <h4 id="history-title" style="margin-bottom: 15px; color: #aeaeb2; font-size: 14px;">แสดงประวัติ: คลังหลัก</h4>
             <div id="history-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
@@ -584,7 +584,7 @@
     // ==========================================
     
     // URL สำหรับ คลังหลัก (รับเข้า / สแกนเบิกตะกร้า)
-    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzAICIR8pjDgXq3kcjkebxg0LN2LpYZFKpcCmvBWdX1N-ehaMQBU35h_pd05uKucHh0/exec;
+    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbysI3_JLKryvf5ebJTn2U9P1HoihG3RTH2esa8HlF84lcBONB5arQIFznaIOB0ImGFF/exec";
     // URL สำหรับ แผนก (จัดการหน่วยงาน เพิ่ม/เบิก ในแผนก)
     const GOOGLE_SHEET_DEPT_URL = ""; 
 
@@ -1312,4 +1312,3 @@
 </script>
 </body>
 </html>
-
