@@ -244,8 +244,27 @@
         
         <div style="width: 100%; max-width: 320px; margin: 0 auto; text-align: left;">
             <input type="text" id="username" class="input-field" placeholder="ชื่อผู้ใช้งาน (ผู้บันทึก)">
-            <input type="password" class="input-field" placeholder="รหัส PIN 4 หลัก">
-            <button class="btn-primary" onclick="login()">เข้าสู่ระบบ</button>
+            <input type="password" class="input-field" placeholder="รหัส PIN 4 หลัก" style="margin-bottom: 8px;">
+            
+            <div style="text-align: right; margin-bottom: 15px;">
+                <span onclick="forgotPassword()" style="color: #4da6ff; font-size: 13px; cursor: pointer; transition: opacity 0.2s;">ลืมรหัสผ่าน?</span>
+            </div>
+
+            <button class="btn-primary" onclick="login()" style="margin-top: 0;">เข้าสู่ระบบ</button>
+
+            <div style="display: flex; align-items: center; margin: 25px 0;">
+                <div style="flex: 1; height: 1px; background: #3a3a3c;"></div>
+                <div style="color: #8e8e93; font-size: 12px; padding: 0 15px;">หรือเข้าสู่ระบบด้วย</div>
+                <div style="flex: 1; height: 1px; background: #3a3a3c;"></div>
+            </div>
+
+            <button class="btn-primary" style="background: #ffffff; color: #000000; margin-top: 0; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500;" onclick="socialLogin('Google')">
+                <i class="fa-brands fa-google" style="color: #db4437; font-size: 18px;"></i> Google
+            </button>
+            
+            <button class="btn-primary" style="background: #000000; color: #ffffff; border: 1px solid #3a3a3c; margin-top: 0; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500;" onclick="socialLogin('Apple')">
+                <i class="fa-brands fa-apple" style="font-size: 22px; margin-bottom: 2px;"></i> Apple
+            </button>
         </div>
     </div>
 
@@ -646,6 +665,51 @@
             title: 'ออกจากระบบ', text: 'ต้องการออกจากระบบ?', icon: 'question', showCancelButton: true, confirmButtonColor: '#ff3b30', cancelButtonColor: '#3a3a3c', background: '#2c2c2e', color: '#fff'
         }).then((result) => {
             if (result.isConfirmed) { currentUser = ''; localStorage.removeItem('stockFlowUser'); document.getElementById('username').value = ''; navigate('login'); }
+        });
+    }
+
+    // ฟังก์ชันลืมรหัสผ่าน
+    function forgotPassword() {
+        Swal.fire({
+            icon: 'info',
+            title: 'ลืมรหัสผ่าน?',
+            text: 'ระบบจะส่งลิงก์สำหรับตั้งรหัสผ่านใหม่ไปยังอีเมลที่ลงทะเบียนไว้',
+            input: 'email',
+            inputPlaceholder: 'กรอกอีเมลของคุณ',
+            showCancelButton: true,
+            confirmButtonText: 'ส่งลิงก์',
+            cancelButtonText: 'ยกเลิก',
+            confirmButtonColor: '#007aff',
+            cancelButtonColor: '#3a3a3c',
+            background: '#2c2c2e',
+            color: '#fff'
+        }).then((result) => {
+            if (result.isConfirmed && result.value) {
+                Swal.fire({ icon: 'success', title: 'ส่งอีเมลสำเร็จ', text: 'กรุณาตรวจสอบกล่องจดหมายของคุณ', background: '#2c2c2e', color: '#fff' });
+            }
+        });
+    }
+
+    // ฟังก์ชันจำลองล็อกอินด้วย Social (Google / Apple)
+    function socialLogin(provider) {
+        Swal.fire({
+            title: 'กำลังเชื่อมต่อ...',
+            text: `กำลังเข้าสู่ระบบผ่านบัญชี ${provider}`,
+            background: '#2c2c2e',
+            color: '#fff',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+                // จำลองการโหลด 1.5 วินาที แล้วล็อกอินสำเร็จ
+                setTimeout(() => {
+                    currentUser = `${provider} User`;
+                    localStorage.setItem('stockFlowUser', currentUser); 
+                    document.getElementById('display-name').innerText = 'ผู้รับผิดชอบ: ' + currentUser;
+                    document.getElementById('profile-name-menu').innerText = currentUser;
+                    Swal.close();
+                    navigate('home');
+                }, 1500);
+            }
         });
     }
 
